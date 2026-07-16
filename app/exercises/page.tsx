@@ -2,9 +2,9 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Plus, Search, Dumbbell, ArrowLeft, History, X, Calendar, Trash2 } from "lucide-react";
+import { Plus, Search, Dumbbell, ArrowLeft, History, X, Calendar, Trash2, Edit2 } from "lucide-react";
 import Link from "next/link";
-import { createExercise, getExercises, getExerciseHistory, deleteExercise } from "@/app/actions";
+import { createExercise, getExercises, getExerciseHistory, deleteExercise, renameExercise } from "@/app/actions";
 
 const BODY_PARTS = ["Chest", "Back", "Legs", "Arms", "Shoulders", "Core", "Cardio", "Biceps", "Triceps"];
 
@@ -22,6 +22,8 @@ export default function ExercisesPage() {
   const [isHistoryLoading, setIsHistoryLoading] = useState(false);
 
   const [exerciseToDelete, setExerciseToDelete] = useState<any>(null);
+  const [exerciseToRename, setExerciseToRename] = useState<any>(null);
+  const [renameValue, setRenameValue] = useState("");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -46,6 +48,30 @@ export default function ExercisesPage() {
 
   const confirmDelete = (ex: any) => {
     setExerciseToDelete(ex);
+  };
+
+  const confirmRename = (ex: any) => {
+    setExerciseToRename(ex);
+    setRenameValue(ex.name);
+  };
+
+  const executeRename = async () => {
+    if (!exerciseToRename || !renameValue.trim()) return;
+    
+    // Optimistic update
+    setExercises(exercises.map(ex => 
+      ex.id === exerciseToRename.id ? { ...ex, name: renameValue } : ex
+    ));
+    
+    const idToRename = exerciseToRename.id;
+    const newName = renameValue;
+    setExerciseToRename(null);
+    setRenameValue("");
+    
+    await renameExercise(idToRename, newName);
+    
+    setToastMessage("Exercise renamed successfully");
+    setTimeout(() => setToastMessage(null), 3000);
   };
 
   const executeDelete = async () => {
@@ -147,6 +173,16 @@ export default function ExercisesPage() {
                 <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400">
                   <History className="w-4 h-4" />
                 </div>
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    confirmRename(ex);
+                  }}
+                  className="w-8 h-8 rounded-full bg-blue-500/10 hover:bg-blue-500/20 flex items-center justify-center text-blue-500 transition"
+                  title="Rename exercise"
+                >
+                  <Edit2 className="w-4 h-4" />
+                </button>
                 <button 
                   onClick={(e) => {
                     e.stopPropagation();
@@ -344,6 +380,52 @@ export default function ExercisesPage() {
                   className="flex-1 py-3 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition shadow-lg shadow-red-500/20"
                 >
                   Delete
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Rename Modal */}
+      <AnimatePresence>
+        {exerciseToRename && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="glass-card w-full max-w-sm rounded-2xl p-6 shadow-2xl"
+            >
+              <h2 className="text-xl font-bold mb-4 text-white text-center">Rename Exercise</h2>
+              <div className="mb-6">
+                <input 
+                  type="text" 
+                  value={renameValue}
+                  onChange={e => setRenameValue(e.target.value)}
+                  className="w-full bg-input rounded-xl px-4 py-3 text-white border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                  placeholder="Exercise name"
+                  autoFocus
+                />
+              </div>
+              
+              <div className="flex space-x-3">
+                <button 
+                  onClick={() => setExerciseToRename(null)}
+                  className="flex-1 py-3 rounded-xl font-medium text-gray-300 bg-white/5 hover:bg-white/10 transition"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={executeRename}
+                  className="flex-1 py-3 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition shadow-lg shadow-blue-500/20"
+                >
+                  Save
                 </button>
               </div>
             </motion.div>

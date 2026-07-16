@@ -159,3 +159,20 @@ export async function deleteExercise(exerciseId: string) {
   revalidatePath("/exercises");
   revalidatePath("/workouts");
 }
+
+export async function renameExercise(exerciseId: string, newName: string) {
+  const userId = await getSessionUserId();
+  
+  await prisma.exercise.updateMany({
+    where: {
+      id: exerciseId,
+      userId
+    },
+    data: {
+      name: newName
+    }
+  });
+  
+  revalidatePath("/exercises");
+  revalidatePath("/workouts");
+}
