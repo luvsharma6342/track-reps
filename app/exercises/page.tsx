@@ -6,7 +6,7 @@ import { Plus, Search, Dumbbell, ArrowLeft, History, X, Calendar, Trash2 } from 
 import Link from "next/link";
 import { createExercise, getExercises, getExerciseHistory, deleteExercise } from "@/app/actions";
 
-const BODY_PARTS = ["Chest", "Back", "Legs", "Arms", "Shoulders", "Core", "Cardio"];
+const BODY_PARTS = ["Chest", "Back", "Legs", "Arms", "Shoulders", "Core", "Cardio", "Biceps", "Triceps"];
 
 export default function ExercisesPage() {
   const [exercises, setExercises] = useState<any[]>([]);

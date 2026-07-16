@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { startWorkout, getExercises, addSetToWorkout, getPreviousSession, createExercise } from "@/app/actions";
 
-const BODY_PARTS = ["Chest", "Back", "Legs", "Arms", "Shoulders", "Core", "Cardio"];
+const BODY_PARTS = ["Chest", "Back", "Legs", "Arms", "Shoulders", "Core", "Cardio", "Biceps", "Triceps"];
 
 export default function WorkoutPage() {
   const router = useRouter();
