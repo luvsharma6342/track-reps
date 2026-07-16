@@ -2,9 +2,12 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Dumbbell, Play, Activity, TrendingUp, Flame, ArrowRight } from "lucide-react";
+import { Dumbbell, Activity, TrendingUp, Flame, Zap } from "lucide-react";
+import { useSession } from "@/lib/auth-client";
 
 export default function Dashboard() {
+  const { data: session, isPending } = useSession();
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -21,11 +24,13 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0a0a0f]">
-      {/* Dynamic Background */}
-      <div className="absolute inset-0 w-full h-full">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-accent/20 rounded-full blur-[120px]" />
+    <div className="relative min-h-screen overflow-hidden bg-[#05050a]">
+      {/* Dynamic Multi-Color Background */}
+      <div className="absolute inset-0 w-full h-full opacity-60">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/30 rounded-full blur-[120px] mix-blend-screen animate-pulse" style={{ animationDuration: '4s' }} />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-fuchsia-600/30 rounded-full blur-[120px] mix-blend-screen animate-pulse" style={{ animationDuration: '5s' }} />
+        <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-cyan-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse" style={{ animationDuration: '6s' }} />
+        <div className="absolute bottom-[20%] left-[-10%] w-[40%] h-[40%] bg-amber-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse" style={{ animationDuration: '7s' }} />
       </div>
 
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6 max-w-5xl mx-auto">
@@ -35,28 +40,37 @@ export default function Dashboard() {
           animate="visible"
           className="w-full text-center"
         >
+          {/* Personalized Greeting */}
+          {!isPending && session?.user?.name && (
+            <motion.div variants={itemVariants} className="mb-4">
+              <span className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-white text-sm font-medium backdrop-blur-md shadow-lg">
+                <span>👋</span> Hi, {session.user.name.split(' ')[0]}! Welcome back.
+              </span>
+            </motion.div>
+          )}
+
           {/* Hero Section */}
-          <motion.div variants={itemVariants} className="mb-6">
-            <span className="inline-block py-1 px-3 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold tracking-wider mb-6">
-              REDEFINE YOUR LIMITS
+          <motion.div variants={itemVariants} className="mb-8 mt-4">
+            <span className="inline-block py-1 px-3 rounded-full bg-gradient-to-r from-indigo-500/20 to-fuchsia-500/20 border border-fuchsia-500/30 text-fuchsia-300 text-sm font-bold tracking-widest mb-6 uppercase shadow-[0_0_15px_rgba(217,70,239,0.2)]">
+              Redefine Your Limits
             </span>
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-gray-400">
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-fuchsia-400 drop-shadow-sm">
               Track Every Rep.<br/>Break Every Record.
             </h1>
-            <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12">
+            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
               Your ultimate lifting companion. Log your heaviest sets, analyze your history, and build the custom routines you need to get stronger.
             </p>
           </motion.div>
 
           {/* Primary Call to Action */}
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
+          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-24">
             <Link href="/workouts" className="w-full sm:w-auto">
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-full sm:w-auto px-8 py-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(99,102,241,0.4)] transition-all"
+                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-indigo-500 to-fuchsia-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(139,92,246,0.5)] hover:shadow-[0_0_60px_rgba(139,92,246,0.7)] transition-all border border-white/10"
               >
-                <Play className="w-5 h-5 fill-current" />
+                <Zap className="w-5 h-5 fill-current text-yellow-300" />
                 Start a Workout
               </motion.button>
             </Link>
@@ -65,9 +79,9 @@ export default function Dashboard() {
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-full sm:w-auto px-8 py-4 glass text-white font-semibold rounded-2xl flex items-center justify-center gap-3 hover:bg-white/10 transition-all border border-white/10"
+                className="w-full sm:w-auto px-8 py-4 glass text-white font-semibold rounded-2xl flex items-center justify-center gap-3 hover:bg-white/10 transition-all border border-white/10 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)]"
               >
-                <Dumbbell className="w-5 h-5 text-gray-300" />
+                <Dumbbell className="w-5 h-5 text-cyan-400" />
                 Manage Library
               </motion.button>
             </Link>
@@ -76,31 +90,31 @@ export default function Dashboard() {
           {/* Features Grid */}
           <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             
-            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-primary/30 transition-colors group">
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Activity className="w-6 h-6 text-blue-500" />
+            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-indigo-500/50 hover:bg-indigo-950/20 transition-all duration-300 group shadow-lg hover:shadow-indigo-500/10">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-blue-600/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform border border-indigo-500/30">
+                <Activity className="w-7 h-7 text-indigo-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Build Custom Routines</h3>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-indigo-300 transition-colors">Build Routines</h3>
               <p className="text-gray-400 text-sm leading-relaxed">
                 Add any exercise you can imagine. Tag them by body part, and quickly add them during your sessions.
               </p>
             </div>
 
-            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-accent/30 transition-colors group">
-              <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Flame className="w-6 h-6 text-accent" />
+            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-fuchsia-500/50 hover:bg-fuchsia-950/20 transition-all duration-300 group shadow-lg hover:shadow-fuchsia-500/10">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-fuchsia-500/20 to-pink-600/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform border border-fuchsia-500/30">
+                <Flame className="w-7 h-7 text-fuchsia-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Log Heavy Sets</h3>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-fuchsia-300 transition-colors">Log Heavy Sets</h3>
               <p className="text-gray-400 text-sm leading-relaxed">
                 Effortlessly record your weights and reps mid-workout. Stay focused on the lift, not the app.
               </p>
             </div>
 
-            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-green-500/30 transition-colors group">
-              <div className="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <TrendingUp className="w-6 h-6 text-green-500" />
+            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-amber-500/50 hover:bg-amber-950/20 transition-all duration-300 group shadow-lg hover:shadow-amber-500/10">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-600/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform border border-amber-500/30">
+                <TrendingUp className="w-7 h-7 text-amber-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Track Progression</h3>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-amber-300 transition-colors">Track Progression</h3>
               <p className="text-gray-400 text-sm leading-relaxed">
                 View your complete exercise history at a glance. See your past performance to beat it today.
               </p>
