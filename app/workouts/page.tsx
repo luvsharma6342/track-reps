@@ -65,13 +65,22 @@ export default function WorkoutPage() {
 
   if (!workoutId) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
-        <Link href="/" className="absolute top-6 left-6 p-2 rounded-full hover:bg-white/10 transition">
+      <div className="relative min-h-screen overflow-hidden bg-[#05050a] flex flex-col items-center justify-center p-6 text-center">
+        {/* Dynamic Multi-Color Background */}
+        <div className="absolute inset-0 w-full h-full opacity-40 pointer-events-none z-0">
+          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/30 rounded-full blur-[120px] mix-blend-screen animate-pulse" style={{ animationDuration: '4s' }} />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-fuchsia-600/30 rounded-full blur-[120px] mix-blend-screen animate-pulse" style={{ animationDuration: '5s' }} />
+          <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-cyan-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse" style={{ animationDuration: '6s' }} />
+          <div className="absolute bottom-[20%] left-[-10%] w-[40%] h-[40%] bg-amber-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse" style={{ animationDuration: '7s' }} />
+        </div>
+
+        <Link href="/" className="absolute top-6 left-6 p-2 rounded-full hover:bg-white/10 transition z-10">
           <ArrowLeft className="w-6 h-6" />
         </Link>
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
+          className="relative z-10"
         >
           <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
             <Clock className="w-10 h-10 text-primary" />
@@ -90,8 +99,17 @@ export default function WorkoutPage() {
   }
 
   return (
-    <div className="min-h-screen p-6 max-w-2xl mx-auto pb-24">
-      <div className="flex items-center justify-between mb-8">
+    <div className="relative min-h-screen overflow-hidden bg-[#05050a]">
+      {/* Dynamic Multi-Color Background */}
+      <div className="absolute inset-0 w-full h-full opacity-40 pointer-events-none z-0 fixed">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/30 rounded-full blur-[120px] mix-blend-screen animate-pulse" style={{ animationDuration: '4s' }} />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-fuchsia-600/30 rounded-full blur-[120px] mix-blend-screen animate-pulse" style={{ animationDuration: '5s' }} />
+        <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-cyan-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse" style={{ animationDuration: '6s' }} />
+        <div className="absolute bottom-[20%] left-[-10%] w-[40%] h-[40%] bg-amber-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse" style={{ animationDuration: '7s' }} />
+      </div>
+
+      <div className="relative z-10 min-h-screen p-6 max-w-2xl mx-auto pb-24">
+        <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold flex items-center">
           <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse mr-3"></div>
           Active Workout
@@ -256,6 +274,7 @@ export default function WorkoutPage() {
           </motion.div>
         </div>
       )}
+      </div>
     </div>
   );
 }
