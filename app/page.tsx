@@ -26,12 +26,17 @@ export default function Dashboard() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#05050a]">
       {/* Dynamic Multi-Color Background */}
-      <div className="absolute inset-0 w-full h-full opacity-60">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[radial-gradient(circle,rgba(79,70,229,0.4)_0%,transparent_70%)] animate-pulse" style={{ animationDuration: '4s' }} />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[radial-gradient(circle,rgba(217,70,239,0.4)_0%,transparent_70%)] animate-pulse" style={{ animationDuration: '5s' }} />
-        <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.3)_0%,transparent_70%)] animate-pulse" style={{ animationDuration: '6s' }} />
-        <div className="absolute bottom-[20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[radial-gradient(circle,rgba(245,158,11,0.3)_0%,transparent_70%)] animate-pulse" style={{ animationDuration: '7s' }} />
-      </div>
+      <div 
+        className="absolute inset-0 w-full h-full opacity-70 pointer-events-none z-0 fixed"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at 15% 15%, rgba(79, 70, 229, 0.35) 0%, transparent 50%),
+            radial-gradient(circle at 85% 85%, rgba(217, 70, 239, 0.35) 0%, transparent 50%),
+            radial-gradient(circle at 85% 15%, rgba(6, 182, 212, 0.25) 0%, transparent 50%),
+            radial-gradient(circle at 15% 85%, rgba(245, 158, 11, 0.25) 0%, transparent 50%)
+          `
+        }}
+      />
 
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6 max-w-5xl mx-auto">
         <motion.div 
