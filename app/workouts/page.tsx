@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Check, ArrowLeft, Search, Clock, History } from "lucide-react";
+import { Plus, Check, ArrowLeft, Search, Clock, History, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { startWorkout, getExercises, addSetToWorkout, getPreviousSession, createExercise } from "@/app/actions";
@@ -11,6 +11,7 @@ const BODY_PARTS = ["Chest", "Back", "Legs", "Arms", "Shoulders", "Core", "Cardi
 export default function WorkoutPage() {
   const router = useRouter();
   const [workoutId, setWorkoutId] = useState<string | null>(null);
+  const [isStarting, setIsStarting] = useState(false);
   const [exercises, setExercises] = useState<any[]>([]);
   
   // Active state for the workout
@@ -30,8 +31,10 @@ export default function WorkoutPage() {
   }, []);
 
   const handleStartWorkout = async () => {
+    setIsStarting(true);
     const workout = await startWorkout();
     setWorkoutId(workout.id);
+    setIsStarting(false);
   };
 
   const handleFinishWorkout = () => {
@@ -96,9 +99,10 @@ export default function WorkoutPage() {
           <p className="text-gray-400 mb-8 max-w-sm">Start your session now. Track your reps, beat your records.</p>
           <button 
             onClick={handleStartWorkout}
-            className="w-full max-w-xs py-4 bg-primary text-white rounded-2xl font-bold text-lg hover:bg-primary/90 transition shadow-lg shadow-primary/20"
+            disabled={isStarting}
+            className="w-full max-w-xs py-4 bg-primary text-white rounded-2xl font-bold text-lg hover:bg-primary/90 transition shadow-lg shadow-primary/20 disabled:opacity-70 flex items-center justify-center"
           >
-            Start Workout
+            {isStarting ? <Loader2 className="w-6 h-6 animate-spin" /> : "Start Workout"}
           </button>
         </div>
       </div>
@@ -363,9 +367,9 @@ function AddSetForm({ workoutId, exerciseId, setNumber, onAdd }: { workoutId: st
       <button 
         onClick={handleAdd}
         disabled={!weight || !reps || isLoading}
-        className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center disabled:opacity-50"
+        className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center disabled:opacity-50 transition"
       >
-        <Plus className="w-5 h-5" />
+        {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-5 h-5" />}
       </button>
     </div>
   );
