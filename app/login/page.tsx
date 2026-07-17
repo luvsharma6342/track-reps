@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, User, Dumbbell, ArrowRight } from "lucide-react";
@@ -62,19 +61,15 @@ export default function LoginPage() {
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/20 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-red-500/10 blur-[120px] pointer-events-none" />
 
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+      <div 
+        className="w-full max-w-md animate-fade-in-up"
       >
         <div className="text-center mb-8">
-          <motion.div
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-black/50 border border-white/10"
+          <div
+            className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-black/50 border border-white/10 animate-scale-in"
           >
             <Dumbbell className="w-8 h-8 text-primary" />
-          </motion.div>
+          </div>
           <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
             {isLogin ? "Welcome back" : "Create an account"}
           </h1>
@@ -133,9 +128,9 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-sm text-center py-2 bg-red-500/10 rounded-xl border border-red-500/20">
+              <div className="text-red-400 text-sm text-center py-2 bg-red-500/10 rounded-xl border border-red-500/20 animate-fade-in">
                 {error}
-              </motion.div>
+              </div>
             )}
 
             <button
@@ -196,7 +191,7 @@ export default function LoginPage() {
             {isLogin ? "Sign up" : "Sign in"}
           </button>
         </p>
-      </motion.div>
+      </div>
     </div>
   );
 }
