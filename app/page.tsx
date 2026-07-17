@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Dumbbell, Activity, TrendingUp, Flame, Zap } from "lucide-react";
+import { Dumbbell, Activity, TrendingUp, Flame, Zap, Calendar } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 
 export default function Dashboard() {
@@ -63,6 +63,15 @@ export default function Dashboard() {
               >
                 <Dumbbell className="w-5 h-5 text-cyan-400" />
                 Manage Library
+              </button>
+            </Link>
+
+            <Link href="/today" className="w-full sm:w-auto">
+              <button 
+                className="w-full sm:w-auto px-8 py-4 glass text-white font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all border border-white/10 hover:border-emerald-400/50 hover:shadow-[0_0_20px_rgba(52,211,153,0.2)] hover:bg-white/10 hover:scale-105 active:scale-95"
+              >
+                <Calendar className="w-5 h-5 text-emerald-400" />
+                Today's Session
               </button>
             </Link>
           </div>

@@ -176,3 +176,28 @@ export async function renameExercise(exerciseId: string, newName: string) {
   revalidatePath("/exercises");
   revalidatePath("/workouts");
 }
+
+export async function getTodaysWorkouts() {
+  const userId = await getSessionUserId();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  return prisma.workout.findMany({
+    where: { 
+      userId,
+      date: {
+        gte: today,
+        lt: tomorrow,
+      }
+    },
+    include: {
+      sets: {
+        include: { exercise: true },
+        orderBy: { setNumber: 'asc' }
+      }
+    },
+    orderBy: { date: "desc" }
+  });
+}
