@@ -3,11 +3,20 @@
 import { useEffect, useState } from "react";
 import { getTodaysWorkouts, updateSet, deleteSet, deleteTodaysExerciseSets } from "@/app/actions";
 import Link from "next/link";
-import { ArrowLeft, Calendar, Dumbbell, Check, Edit2, X, Trash2 } from "lucide-react";
+import { ArrowLeft, Calendar, Dumbbell, Check, Edit2, X, Trash2, AlertTriangle } from "lucide-react";
 
 export default function TodaysSessionPage() {
   const [workouts, setWorkouts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Custom states for Delete Modal and Toasts
+  const [deleteConf, setDeleteConf] = useState<{ type: 'exercise' | 'set', id: string } | null>(null);
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(null), 3000);
+  };
 
   const fetchWorkouts = () => {
     getTodaysWorkouts().then(data => {
@@ -19,6 +28,20 @@ export default function TodaysSessionPage() {
   useEffect(() => {
     fetchWorkouts();
   }, []);
+
+  const confirmDelete = async () => {
+    if (!deleteConf) return;
+    
+    if (deleteConf.type === 'exercise') {
+      await deleteTodaysExerciseSets(deleteConf.id);
+      showToast("Exercise deleted");
+    } else {
+      await deleteSet(deleteConf.id);
+      showToast("Set deleted");
+    }
+    setDeleteConf(null);
+    fetchWorkouts();
+  };
 
   // Aggregate exercises from all of today's workouts
   const exerciseMap = new Map<string, any>();
@@ -40,6 +63,47 @@ export default function TodaysSessionPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#05050a]">
+      {/* Toast Notification */}
+      {toastMsg && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-emerald-500 text-white px-6 py-3 rounded-2xl shadow-xl shadow-emerald-500/20 font-medium flex items-center gap-2 animate-fade-in-up">
+          <Check className="w-5 h-5" />
+          {toastMsg}
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConf && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#0f0f16] border border-white/10 p-6 rounded-3xl max-w-sm w-full shadow-2xl">
+            <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
+              <AlertTriangle className="w-6 h-6 text-red-500" />
+            </div>
+            <h2 className="text-xl font-bold text-white mb-2">
+              Delete {deleteConf.type === 'exercise' ? 'Exercise' : 'Set'}?
+            </h2>
+            <p className="text-gray-400 mb-6">
+              {deleteConf.type === 'exercise' 
+                ? "Are you sure you want to delete this exercise and all its sets from today's session? This cannot be undone."
+                : "Are you sure you want to delete this set? This cannot be undone."}
+            </p>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setDeleteConf(null)}
+                className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-semibold transition"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={confirmDelete}
+                className="flex-1 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold transition shadow-lg shadow-red-500/20"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Dynamic Multi-Color Background */}
       <div 
         className="absolute inset-0 w-full h-full opacity-50 pointer-events-none z-0 fixed"
@@ -99,12 +163,7 @@ export default function TodaysSessionPage() {
                       {activeEx.sets.length} Sets Completed
                     </div>
                     <button 
-                      onClick={async () => {
-                        if (confirm("Delete this exercise and all its sets from today?")) {
-                          await deleteTodaysExerciseSets(activeEx.exercise.id);
-                          fetchWorkouts();
-                        }
-                      }}
+                      onClick={() => setDeleteConf({ type: 'exercise', id: activeEx.exercise.id })}
                       className="w-8 h-8 flex items-center justify-center text-red-500 hover:bg-red-500/20 bg-red-500/10 rounded-xl transition"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -115,7 +174,13 @@ export default function TodaysSessionPage() {
                 <div className="p-4 space-y-4">
                   {/* Current Sets */}
                   {activeEx.sets.map((set: any, i: number) => (
-                    <SetRow key={set.id} set={set} index={i} onSave={fetchWorkouts} />
+                    <SetRow 
+                      key={set.id} 
+                      set={set} 
+                      index={i} 
+                      onSave={fetchWorkouts} 
+                      onDelete={() => setDeleteConf({ type: 'set', id: set.id })}
+                    />
                   ))}
                 </div>
               </div>
@@ -127,7 +192,7 @@ export default function TodaysSessionPage() {
   );
 }
 
-function SetRow({ set, index, onSave }: { set: any, index: number, onSave: () => void }) {
+function SetRow({ set, index, onSave, onDelete }: { set: any, index: number, onSave: () => void, onDelete: () => void }) {
   const [isEditing, setIsEditing] = useState(false);
   const [weight, setWeight] = useState(set.weight.toString());
   const [reps, setReps] = useState(set.reps.toString());
@@ -209,12 +274,7 @@ function SetRow({ set, index, onSave }: { set: any, index: number, onSave: () =>
           <Edit2 className="w-4 h-4" />
         </button>
         <button 
-          onClick={async () => {
-            if (confirm("Delete this set?")) {
-              await deleteSet(set.id);
-              onSave();
-            }
-          }}
+          onClick={onDelete}
           className="w-8 h-8 flex items-center justify-center text-red-400 hover:text-white bg-red-500/10 hover:bg-red-500/30 rounded-xl transition"
         >
           <Trash2 className="w-4 h-4" />
