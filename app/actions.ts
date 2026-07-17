@@ -30,8 +30,6 @@ export async function createExercise(data: { name: string; bodyPart: string }) {
       userId,
     }
   });
-  revalidatePath("/exercises");
-  revalidatePath("/workouts");
   return exercise;
 }
 
@@ -56,7 +54,6 @@ export async function startWorkout() {
       date: new Date(),
     }
   });
-  revalidatePath("/workouts");
   return workout;
 }
 
@@ -71,7 +68,6 @@ export async function addSetToWorkout(workoutId: string, exerciseId: string, set
       reps
     }
   });
-  revalidatePath("/workouts");
   return newSet;
 }
 
@@ -155,9 +151,6 @@ export async function deleteExercise(exerciseId: string) {
       userId
     }
   });
-  
-  revalidatePath("/exercises");
-  revalidatePath("/workouts");
 }
 
 export async function renameExercise(exerciseId: string, newName: string) {
@@ -172,9 +165,6 @@ export async function renameExercise(exerciseId: string, newName: string) {
       name: newName
     }
   });
-  
-  revalidatePath("/exercises");
-  revalidatePath("/workouts");
 }
 
 export async function getTodaysWorkouts(startIso?: string, endIso?: string) {
@@ -215,9 +205,6 @@ export async function updateSet(setId: string, weight: number, reps: number) {
     where: { id: setId },
     data: { weight, reps }
   });
-  
-  revalidatePath("/today");
-  revalidatePath("/workouts");
 }
 
 export async function deleteSet(setId: string) {
@@ -225,8 +212,6 @@ export async function deleteSet(setId: string) {
   await prisma.set.delete({
     where: { id: setId }
   });
-  revalidatePath("/today");
-  revalidatePath("/workouts");
 }
 
 export async function deleteTodaysExerciseSets(exerciseId: string) {
@@ -248,7 +233,4 @@ export async function deleteTodaysExerciseSets(exerciseId: string) {
       }
     }
   });
-
-  revalidatePath("/today");
-  revalidatePath("/workouts");
 }
