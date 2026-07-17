@@ -27,10 +27,10 @@ export default function Dashboard() {
     <div className="relative min-h-screen overflow-hidden bg-[#05050a]">
       {/* Dynamic Multi-Color Background */}
       <div className="absolute inset-0 w-full h-full opacity-60">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/30 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }} />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-fuchsia-600/30 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '5s' }} />
-        <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-cyan-500/20 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '6s' }} />
-        <div className="absolute bottom-[20%] left-[-10%] w-[40%] h-[40%] bg-amber-500/20 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '7s' }} />
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[radial-gradient(circle,rgba(79,70,229,0.4)_0%,transparent_70%)] animate-pulse" style={{ animationDuration: '4s' }} />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[radial-gradient(circle,rgba(217,70,239,0.4)_0%,transparent_70%)] animate-pulse" style={{ animationDuration: '5s' }} />
+        <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.3)_0%,transparent_70%)] animate-pulse" style={{ animationDuration: '6s' }} />
+        <div className="absolute bottom-[20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[radial-gradient(circle,rgba(245,158,11,0.3)_0%,transparent_70%)] animate-pulse" style={{ animationDuration: '7s' }} />
       </div>
 
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6 max-w-5xl mx-auto">
