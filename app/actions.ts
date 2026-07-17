@@ -201,3 +201,15 @@ export async function getTodaysWorkouts() {
     orderBy: { date: "desc" }
   });
 }
+
+export async function updateSet(setId: string, weight: number, reps: number) {
+  await getSessionUserId(); // ensure auth
+  
+  await prisma.set.update({
+    where: { id: setId },
+    data: { weight, reps }
+  });
+  
+  revalidatePath("/today");
+  revalidatePath("/workouts");
+}

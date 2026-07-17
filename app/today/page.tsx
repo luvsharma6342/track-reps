@@ -1,19 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getTodaysWorkouts } from "@/app/actions";
+import { getTodaysWorkouts, updateSet } from "@/app/actions";
 import Link from "next/link";
-import { ArrowLeft, Calendar, Dumbbell, Check } from "lucide-react";
+import { ArrowLeft, Calendar, Dumbbell, Check, Edit2, X } from "lucide-react";
 
 export default function TodaysSessionPage() {
   const [workouts, setWorkouts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchWorkouts = () => {
     getTodaysWorkouts().then(data => {
       setWorkouts(data);
       setIsLoading(false);
     });
+  };
+
+  useEffect(() => {
+    fetchWorkouts();
   }, []);
 
   // Aggregate exercises from all of today's workouts
@@ -98,20 +102,7 @@ export default function TodaysSessionPage() {
                 <div className="p-4 space-y-4">
                   {/* Current Sets */}
                   {activeEx.sets.map((set: any, i: number) => (
-                    <div key={set.id} className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-medium text-gray-400">
-                        {i + 1}
-                      </div>
-                      <div className="flex-1 bg-white/5 rounded-xl px-4 py-2 text-center text-white">
-                        {set.weight} kg
-                      </div>
-                      <div className="flex-1 bg-white/5 rounded-xl px-4 py-2 text-center text-white">
-                        {set.reps} reps
-                      </div>
-                      <div className="w-8 h-8 flex items-center justify-center text-emerald-500">
-                        <Check className="w-5 h-5" />
-                      </div>
-                    </div>
+                    <SetRow key={set.id} set={set} index={i} onSave={fetchWorkouts} />
                   ))}
                 </div>
               </div>
@@ -119,6 +110,90 @@ export default function TodaysSessionPage() {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function SetRow({ set, index, onSave }: { set: any, index: number, onSave: () => void }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [weight, setWeight] = useState(set.weight.toString());
+  const [reps, setReps] = useState(set.reps.toString());
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    await updateSet(set.id, parseFloat(weight), parseInt(reps));
+    setIsEditing(false);
+    setIsSaving(false);
+    onSave();
+  };
+
+  if (isEditing) {
+    return (
+      <div className="flex items-center gap-3">
+        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-medium text-gray-400 shrink-0">
+          {index + 1}
+        </div>
+        <div className="flex-1 relative">
+          <input 
+            type="number" 
+            value={weight}
+            onChange={e => setWeight(e.target.value)}
+            className="w-full bg-input border border-primary/50 rounded-xl px-4 py-2 text-center text-white focus:border-primary outline-none"
+            placeholder="kg"
+            autoFocus
+          />
+        </div>
+        <div className="flex-1 relative">
+          <input 
+            type="number" 
+            value={reps}
+            onChange={e => setReps(e.target.value)}
+            className="w-full bg-input border border-primary/50 rounded-xl px-4 py-2 text-center text-white focus:border-primary outline-none"
+            placeholder="reps"
+          />
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <button 
+            onClick={handleSave}
+            disabled={isSaving}
+            className="w-8 h-8 flex items-center justify-center text-emerald-400 bg-emerald-400/10 rounded-xl hover:bg-emerald-400/20 transition disabled:opacity-50"
+          >
+            <Check className="w-4 h-4" />
+          </button>
+          <button 
+            onClick={() => {
+              setIsEditing(false);
+              setWeight(set.weight.toString());
+              setReps(set.reps.toString());
+            }}
+            disabled={isSaving}
+            className="w-8 h-8 flex items-center justify-center text-red-400 bg-red-400/10 rounded-xl hover:bg-red-400/20 transition disabled:opacity-50"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-3 group">
+      <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-medium text-gray-400 shrink-0">
+        {index + 1}
+      </div>
+      <div className="flex-1 bg-white/5 rounded-xl px-4 py-2 text-center text-white transition group-hover:bg-white/10">
+        {set.weight} kg
+      </div>
+      <div className="flex-1 bg-white/5 rounded-xl px-4 py-2 text-center text-white transition group-hover:bg-white/10">
+        {set.reps} reps
+      </div>
+      <button 
+        onClick={() => setIsEditing(true)}
+        className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white transition shrink-0 bg-white/5 rounded-xl opacity-50 group-hover:opacity-100"
+      >
+        <Edit2 className="w-4 h-4" />
+      </button>
     </div>
   );
 }
