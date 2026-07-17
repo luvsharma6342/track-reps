@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Plus, Check, ArrowLeft, Search, Clock, History } from "lucide-react";
 import Link from "next/link";
@@ -82,10 +81,8 @@ export default function WorkoutPage() {
         <Link href="/" className="absolute top-6 left-6 p-2 rounded-full hover:bg-white/10 transition z-10">
           <ArrowLeft className="w-6 h-6" />
         </Link>
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="relative z-10"
+        <div
+          className="relative z-10 animate-scale-in"
         >
           <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
             <Clock className="w-10 h-10 text-primary" />
@@ -98,7 +95,7 @@ export default function WorkoutPage() {
           >
             Start Workout
           </button>
-        </motion.div>
+        </div>
       </div>
     );
   }
@@ -134,11 +131,10 @@ export default function WorkoutPage() {
 
       <div className="space-y-6">
         {activeExercises.map((activeEx, exIndex) => (
-          <motion.div 
+          <div 
             key={activeEx.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="glass-card rounded-2xl overflow-hidden"
+            className="glass-card rounded-2xl overflow-hidden animate-fade-in-up"
+            style={{ animationDelay: `${exIndex * 100}ms` }}
           >
             <div className="p-4 border-b border-white/5 bg-white/5">
               <h2 className="font-bold text-lg text-white">{activeEx.name}</h2>
@@ -194,7 +190,7 @@ export default function WorkoutPage() {
                 }} 
               />
             </div>
-          </motion.div>
+          </div>
         ))}
 
         <button 
@@ -208,11 +204,9 @@ export default function WorkoutPage() {
 
       {/* Add Exercise Modal */}
       {isAddingExercise && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex flex-col justify-end sm:justify-center p-0 sm:p-4">
-          <motion.div 
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            className="glass-card w-full sm:max-w-md mx-auto rounded-t-3xl sm:rounded-3xl h-[80vh] sm:h-[600px] flex flex-col"
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex flex-col justify-end sm:justify-center p-0 sm:p-4 animate-fade-in">
+          <div 
+            className="glass-card w-full sm:max-w-md mx-auto rounded-t-3xl sm:rounded-3xl h-[80vh] sm:h-[600px] flex flex-col animate-slide-up sm:animate-scale-in"
           >
             <div className="p-4 border-b border-white/10 flex justify-between items-center">
               <h2 className="text-xl font-bold">Select Exercise</h2>
@@ -281,7 +275,7 @@ export default function WorkoutPage() {
                 </button>
               )}
             </div>
-          </motion.div>
+          </div>
         </div>
       )}
       </div>
