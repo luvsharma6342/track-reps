@@ -215,7 +215,7 @@ function SetRow({ set, index, onSave, onDelete }: { set: any, index: number, onS
     return (
       <div className="flex items-center gap-3">
         <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-medium text-gray-400 shrink-0">
-          {index + 1}
+          {set.isDropSet ? <span className="text-orange-500 font-bold text-xs">D</span> : (index + 1)}
         </div>
         <div className="flex-1 relative">
           <input 
@@ -263,7 +263,7 @@ function SetRow({ set, index, onSave, onDelete }: { set: any, index: number, onS
   return (
     <div className="flex items-center gap-3 group">
       <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-medium text-gray-400 shrink-0">
-        {index + 1}
+        {set.isDropSet ? <span className="text-orange-500 font-bold text-xs">D</span> : (index + 1)}
       </div>
       <div className="flex-1 bg-white/5 rounded-xl px-4 py-2 text-center text-white transition group-hover:bg-white/10">
         {set.weight} kg

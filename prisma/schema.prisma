@@ -98,4 +98,5 @@ model Set {
   setNumber  Int
   weight     Float
   reps       Int
+  isDropSet  Boolean  @default(false)
 }

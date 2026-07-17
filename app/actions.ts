@@ -57,7 +57,7 @@ export async function startWorkout() {
   return workout;
 }
 
-export async function addSetToWorkout(workoutId: string, exerciseId: string, setNumber: number, weight: number, reps: number) {
+export async function addSetToWorkout(workoutId: string, exerciseId: string, setNumber: number, weight: number, reps: number, isDropSet: boolean = false) {
   await getSessionUserId(); // just ensure auth
   const newSet = await prisma.set.create({
     data: {
@@ -65,7 +65,8 @@ export async function addSetToWorkout(workoutId: string, exerciseId: string, set
       exerciseId,
       setNumber,
       weight,
-      reps
+      reps,
+      isDropSet
     }
   });
   return newSet;
