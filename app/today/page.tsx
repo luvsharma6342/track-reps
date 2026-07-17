@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getTodaysWorkouts, updateSet } from "@/app/actions";
+import { getTodaysWorkouts, updateSet, deleteSet, deleteTodaysExerciseSets } from "@/app/actions";
 import Link from "next/link";
-import { ArrowLeft, Calendar, Dumbbell, Check, Edit2, X } from "lucide-react";
+import { ArrowLeft, Calendar, Dumbbell, Check, Edit2, X, Trash2 } from "lucide-react";
 
 export default function TodaysSessionPage() {
   const [workouts, setWorkouts] = useState<any[]>([]);
@@ -94,8 +94,21 @@ export default function TodaysSessionPage() {
                     <h2 className="font-bold text-lg text-white">{activeEx.exercise.name}</h2>
                     <span className="text-xs text-primary">{activeEx.exercise.bodyPart}</span>
                   </div>
-                  <div className="text-sm font-medium text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full">
-                    {activeEx.sets.length} Sets Completed
+                  <div className="flex items-center gap-3">
+                    <div className="text-sm font-medium text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full">
+                      {activeEx.sets.length} Sets Completed
+                    </div>
+                    <button 
+                      onClick={async () => {
+                        if (confirm("Delete this exercise and all its sets from today?")) {
+                          await deleteTodaysExerciseSets(activeEx.exercise.id);
+                          fetchWorkouts();
+                        }
+                      }}
+                      className="w-8 h-8 flex items-center justify-center text-red-500 hover:bg-red-500/20 bg-red-500/10 rounded-xl transition"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
                 
@@ -188,12 +201,25 @@ function SetRow({ set, index, onSave }: { set: any, index: number, onSave: () =>
       <div className="flex-1 bg-white/5 rounded-xl px-4 py-2 text-center text-white transition group-hover:bg-white/10">
         {set.reps} reps
       </div>
-      <button 
-        onClick={() => setIsEditing(true)}
-        className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white transition shrink-0 bg-white/5 rounded-xl opacity-50 group-hover:opacity-100"
-      >
-        <Edit2 className="w-4 h-4" />
-      </button>
+      <div className="flex items-center gap-2 shrink-0 opacity-50 group-hover:opacity-100 transition">
+        <button 
+          onClick={() => setIsEditing(true)}
+          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white bg-white/5 rounded-xl transition"
+        >
+          <Edit2 className="w-4 h-4" />
+        </button>
+        <button 
+          onClick={async () => {
+            if (confirm("Delete this set?")) {
+              await deleteSet(set.id);
+              onSave();
+            }
+          }}
+          className="w-8 h-8 flex items-center justify-center text-red-400 hover:text-white bg-red-500/10 hover:bg-red-500/30 rounded-xl transition"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   );
 }
