@@ -84,6 +84,10 @@ export async function getActiveWorkout() {
       }
     },
     include: {
+      workoutExercises: {
+        include: { exercise: true },
+        orderBy: { createdAt: 'asc' }
+      },
       sets: {
         include: { exercise: true },
         orderBy: { setNumber: 'asc' }
@@ -104,6 +108,28 @@ export async function finishWorkout(workoutId: string) {
   revalidatePath("/today");
 }
 
+export async function addExerciseToWorkout(workoutId: string, exerciseId: string) {
+  await getSessionUserId();
+  
+  const existing = await prisma.workoutExercise.findUnique({
+    where: {
+      workoutId_exerciseId: {
+        workoutId,
+        exerciseId
+      }
+    }
+  });
+
+  if (!existing) {
+    await prisma.workoutExercise.create({
+      data: {
+        workoutId,
+        exerciseId
+      }
+    });
+  }
+}
+
 export async function addSetToWorkout(workoutId: string, exerciseId: string, setNumber: number, weight: number, reps: number, isDropSet: boolean = false) {
   await getSessionUserId(); // just ensure auth
   const newSet = await prisma.set.create({
@@ -116,6 +142,10 @@ export async function addSetToWorkout(workoutId: string, exerciseId: string, set
       isDropSet
     }
   });
+  
+  // Ensure the WorkoutExercise link exists just in case
+  await addExerciseToWorkout(workoutId, exerciseId);
+  
   return newSet;
 }
 
@@ -262,23 +292,17 @@ export async function deleteSet(setId: string) {
   });
 }
 
-export async function deleteTodaysExerciseSets(exerciseId: string) {
+export async function removeExerciseFromWorkout(workoutId: string, exerciseId: string) {
   const userId = await getSessionUserId();
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const workout = await prisma.workout.findUnique({ where: { id: workoutId } });
+  if (!workout || workout.userId !== userId) return;
+
+  await prisma.workoutExercise.deleteMany({
+    where: { workoutId, exerciseId }
+  });
 
   await prisma.set.deleteMany({
-    where: {
-      exerciseId,
-      workout: {
-        userId,
-        date: {
-          gte: today,
-          lt: tomorrow,
-        }
-      }
-    }
+    where: { workoutId, exerciseId }
   });
 }

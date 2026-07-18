@@ -77,7 +77,8 @@ model Exercise {
   bodyPart  String
   createdAt DateTime @default(now())
 
-  sets Set[]
+  sets             Set[]
+  workoutExercises WorkoutExercise[]
 }
 
 model Workout {
@@ -87,7 +88,8 @@ model Workout {
   date    DateTime  @default(now())
   endTime DateTime?
 
-  sets Set[]
+  sets             Set[]
+  workoutExercises WorkoutExercise[]
 }
 
 model Set {
@@ -100,4 +102,15 @@ model Set {
   weight     Float
   reps       Int
   isDropSet  Boolean  @default(false)
+}
+
+model WorkoutExercise {
+  id         String   @id @default(uuid())
+  workoutId  String
+  workout    Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  exerciseId String
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([workoutId, exerciseId])
 }

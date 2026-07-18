@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Plus, Check, ArrowLeft, Search, Clock, History, Loader2, Trash2, Edit2, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { startWorkout, getExercises, addSetToWorkout, getPreviousSession, createExercise, deleteTodaysExerciseSets, updateSet, deleteSet, getActiveWorkout, finishWorkout } from "@/app/actions";
+import { startWorkout, getExercises, addSetToWorkout, getPreviousSession, createExercise, removeExerciseFromWorkout, updateSet, deleteSet, getActiveWorkout, finishWorkout, addExerciseToWorkout } from "@/app/actions";
 
 const BODY_PARTS = ["Chest", "Back", "Legs", "Arms", "Shoulders", "Core", "Cardio", "Biceps", "Triceps"];
 
@@ -32,17 +32,31 @@ export default function WorkoutPage() {
     getActiveWorkout().then(async active => {
       if (active) {
         setWorkoutId(active.id);
-        const grouped = new Map();
-        for (const set of active.sets) {
-           if (!grouped.has(set.exerciseId)) {
-             grouped.set(set.exerciseId, {
-               ...set.exercise,
-               sets: [],
-             });
-           }
-           grouped.get(set.exerciseId).sets.push(set);
+        const reconstructed: any[] = [];
+        
+        if (active.workoutExercises && active.workoutExercises.length > 0) {
+          for (const we of active.workoutExercises) {
+            const exSets = active.sets.filter((s: any) => s.exerciseId === we.exerciseId);
+            reconstructed.push({
+              ...we.exercise,
+              sets: exSets
+            });
+          }
+        } else {
+          // Fallback for workouts that predated WorkoutExercise
+          const grouped = new Map();
+          for (const set of active.sets) {
+             if (!grouped.has(set.exerciseId)) {
+               grouped.set(set.exerciseId, {
+                 ...set.exercise,
+                 sets: [],
+               });
+             }
+             grouped.get(set.exerciseId).sets.push(set);
+          }
+          reconstructed.push(...Array.from(grouped.values()));
         }
-        const reconstructed = Array.from(grouped.values());
+
         for (const ex of reconstructed) {
           const prev = await getPreviousSession(ex.id);
           ex.previousSets = prev || [];
@@ -60,6 +74,22 @@ export default function WorkoutPage() {
     setIsStarting(false);
   };
 
+  const handleAddExercise = async (exercise: any) => {
+    if (workoutId) {
+      await addExerciseToWorkout(workoutId, exercise.id);
+    }
+    const previousSets = await getPreviousSession(exercise.id);
+    setActiveExercises([...activeExercises, { ...exercise, sets: [], previousSets: previousSets || [] }]);
+    setSearch("");
+  };
+
+  const handleDeleteExercise = async (exerciseId: string) => {
+    if (workoutId) {
+      await removeExerciseFromWorkout(workoutId, exerciseId);
+    }
+    setActiveExercises(activeExercises.filter((e) => e.id !== exerciseId));
+  };
+
   const handleFinishWorkout = async () => {
     if (workoutId) {
       await finishWorkout(workoutId);
@@ -67,22 +97,11 @@ export default function WorkoutPage() {
     router.push("/");
   };
 
-  const handleAddExerciseToWorkout = async (exercise: any) => {
-    const previousSets = await getPreviousSession(exercise.id);
-    
-    setActiveExercises([...activeExercises, {
-      ...exercise,
-      sets: [],
-      previousSets: previousSets || []
-    }]);
-    setSearch("");
-  };
-
   const handleCreateNewExercise = async () => {
     if (!newExerciseName.trim()) return;
     const newEx = await createExercise({ name: newExerciseName, bodyPart: newExerciseBodyPart }); 
     setExercises([...exercises, newEx]);
-    handleAddExerciseToWorkout(newEx);
+    handleAddExercise(newEx);
     setIsCreatingExercise(false);
     setNewExerciseName("");
     setSearch("");
@@ -287,7 +306,7 @@ export default function WorkoutPage() {
               {filteredExercises.map(ex => (
                 <button 
                   key={ex.id}
-                  onClick={() => handleAddExerciseToWorkout(ex)}
+                  onClick={() => handleAddExercise(ex)}
                   className="w-full text-left p-4 rounded-xl glass border border-white/5 hover:border-primary/30 transition flex items-center justify-between group"
                 >
                   <div>
