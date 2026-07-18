@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import { getBodyMetrics, logBodyMetrics, deleteBodyMetrics } from "@/app/actions";
 import Link from "next/link";
-import { ArrowLeft, Activity, Save, Check, Scale, Ruler, Trash2, Edit2 } from "lucide-react";
+import { ArrowLeft, Activity, Save, Check, Scale, Ruler, Trash2, Edit2, Loader2 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
 export default function MetricsPage() {
   const [metrics, setMetrics] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [metricToDelete, setMetricToDelete] = useState<string | null>(null);
 
@@ -60,8 +61,10 @@ export default function MetricsPage() {
   };
 
   const handleDeleteConfirm = async (id: string) => {
+    setIsDeleting(true);
     await deleteBodyMetrics(id);
     await loadData();
+    setIsDeleting(false);
     setMetricToDelete(null);
     showToast("Metrics deleted!");
   };
@@ -262,15 +265,17 @@ export default function MetricsPage() {
              <div className="flex gap-3">
                <button 
                  onClick={() => setMetricToDelete(null)}
-                 className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-medium transition"
+                 disabled={isDeleting}
+                 className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-medium transition disabled:opacity-50"
                >
                  Cancel
                </button>
                <button 
                  onClick={() => handleDeleteConfirm(metricToDelete)}
-                 className="flex-1 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition"
+                 disabled={isDeleting}
+                 className="flex-1 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition flex items-center justify-center gap-2 disabled:opacity-50"
                >
-                 Delete
+                 {isDeleting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Delete"}
                </button>
              </div>
            </div>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getTodaysWorkouts, updateSet, deleteSet, deleteTodaysExerciseSets } from "@/app/actions";
 import Link from "next/link";
-import { ArrowLeft, Calendar, Dumbbell, Check, Edit2, X, Trash2, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Calendar, Dumbbell, Check, Edit2, X, Trash2, AlertTriangle, Loader2 } from "lucide-react";
 
 export default function TodaysSessionPage() {
   const [workouts, setWorkouts] = useState<any[]>([]);
@@ -12,6 +12,7 @@ export default function TodaysSessionPage() {
   // Custom states for Delete Modal and Toasts
   const [deleteConf, setDeleteConf] = useState<{ type: 'exercise' | 'set', id: string } | null>(null);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const showToast = (msg: string) => {
     setToastMsg(msg);
@@ -36,6 +37,7 @@ export default function TodaysSessionPage() {
 
   const confirmDelete = async () => {
     if (!deleteConf) return;
+    setIsDeleting(true);
     
     if (deleteConf.type === 'exercise') {
       await deleteTodaysExerciseSets(deleteConf.id);
@@ -45,6 +47,7 @@ export default function TodaysSessionPage() {
       showToast("Set deleted");
     }
     setDeleteConf(null);
+    setIsDeleting(false);
     fetchWorkouts();
   };
 
@@ -94,15 +97,17 @@ export default function TodaysSessionPage() {
             <div className="flex gap-3">
               <button 
                 onClick={() => setDeleteConf(null)}
-                className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-semibold transition"
+                disabled={isDeleting}
+                className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-semibold transition disabled:opacity-50"
               >
                 Cancel
               </button>
               <button 
                 onClick={confirmDelete}
-                className="flex-1 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold transition shadow-lg shadow-red-500/20"
+                disabled={isDeleting}
+                className="flex-1 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold transition shadow-lg shadow-red-500/20 flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                Delete
+                {isDeleting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Delete"}
               </button>
             </div>
           </div>

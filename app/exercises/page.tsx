@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Search, Dumbbell, ArrowLeft, History, X, Calendar, Trash2, Edit2 } from "lucide-react";
+import { Plus, Search, Dumbbell, ArrowLeft, History, X, Calendar, Trash2, Edit2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { createExercise, getExercises, getExerciseHistory, deleteExercise, renameExercise } from "@/app/actions";
 
@@ -21,6 +21,7 @@ export default function ExercisesPage() {
   const [isHistoryLoading, setIsHistoryLoading] = useState(false);
 
   const [exerciseToDelete, setExerciseToDelete] = useState<any>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [exerciseToRename, setExerciseToRename] = useState<any>(null);
   const [renameValue, setRenameValue] = useState("");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -76,12 +77,15 @@ export default function ExercisesPage() {
   const executeDelete = async () => {
     if (!exerciseToDelete) return;
     
-    // Optimistic UI update
-    setExercises(exercises.filter(ex => ex.id !== exerciseToDelete.id));
+    setIsDeleting(true);
     const idToDelete = exerciseToDelete.id;
-    setExerciseToDelete(null);
     
     await deleteExercise(idToDelete);
+    
+    // Update UI after deletion
+    setExercises(exercises.filter(ex => ex.id !== idToDelete));
+    setExerciseToDelete(null);
+    setIsDeleting(false);
     
     // Show toast
     setToastMessage("Exercise deleted successfully");
@@ -346,15 +350,17 @@ export default function ExercisesPage() {
             <div className="flex space-x-3">
               <button 
                 onClick={() => setExerciseToDelete(null)}
-                className="flex-1 py-3 rounded-xl font-medium text-gray-300 bg-white/5 hover:bg-white/10 transition"
+                disabled={isDeleting}
+                className="flex-1 py-3 rounded-xl font-medium text-gray-300 bg-white/5 hover:bg-white/10 transition disabled:opacity-50"
               >
                 Cancel
               </button>
               <button 
                 onClick={executeDelete}
-                className="flex-1 py-3 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition shadow-lg shadow-red-500/20"
+                disabled={isDeleting}
+                className="flex-1 py-3 rounded-xl font-bold text-white bg-red-500 hover:bg-red-600 transition shadow-lg shadow-red-500/20 flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                Delete
+                {isDeleting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Delete"}
               </button>
             </div>
           </div>

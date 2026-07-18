@@ -18,6 +18,7 @@ export default function WorkoutPage() {
   
   // Active state for the workout
   const [activeExercises, setActiveExercises] = useState<any[]>([]);
+  const [deletingExerciseId, setDeletingExerciseId] = useState<string | null>(null);
   
   // Modal and new exercise state
   const [isCreatingExercise, setIsCreatingExercise] = useState(false);
@@ -85,10 +86,12 @@ export default function WorkoutPage() {
   };
 
   const handleDeleteExercise = async (exerciseId: string) => {
+    setDeletingExerciseId(exerciseId);
     if (workoutId) {
       await removeExerciseFromWorkout(workoutId, exerciseId);
     }
     setActiveExercises(activeExercises.filter((e) => e.id !== exerciseId));
+    setDeletingExerciseId(null);
   };
 
   const handleFinishWorkout = async () => {
@@ -210,10 +213,11 @@ export default function WorkoutPage() {
                 </div>
                 <button 
                   onClick={() => handleDeleteExercise(activeEx.id)}
-                  className="w-8 h-8 flex items-center justify-center text-red-500 hover:bg-red-500/20 bg-red-500/10 rounded-xl transition"
+                  disabled={deletingExerciseId === activeEx.id}
+                  className="w-8 h-8 flex items-center justify-center text-red-500 hover:bg-red-500/20 bg-red-500/10 rounded-xl transition disabled:opacity-50"
                   title="Remove Exercise"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  {deletingExerciseId === activeEx.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
                 </button>
               </div>
               
@@ -458,6 +462,7 @@ function WorkoutSetRow({ set, index, onSave, onDelete }: { set: any, index: numb
   const [weight, setWeight] = useState(set.weight.toString());
   const [reps, setReps] = useState(set.reps.toString());
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -468,8 +473,10 @@ function WorkoutSetRow({ set, index, onSave, onDelete }: { set: any, index: numb
   };
 
   const handleDelete = async () => {
+    setIsDeleting(true);
     await deleteSet(set.id);
     onDelete();
+    setIsDeleting(false);
   };
 
   if (isEditing) {
@@ -541,9 +548,10 @@ function WorkoutSetRow({ set, index, onSave, onDelete }: { set: any, index: numb
         </button>
         <button 
           onClick={handleDelete}
-          className="w-8 h-8 flex items-center justify-center text-red-400 hover:text-white bg-red-500/10 hover:bg-red-500/30 rounded-xl transition"
+          disabled={isDeleting}
+          className="w-8 h-8 flex items-center justify-center text-red-400 hover:text-white bg-red-500/10 hover:bg-red-500/30 rounded-xl transition disabled:opacity-50"
         >
-          <Trash2 className="w-4 h-4" />
+          {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
         </button>
       </div>
     </div>
