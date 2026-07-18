@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
@@ -61,15 +61,27 @@ export async function startWorkout() {
       date: new Date(),
     }
   });
+  revalidatePath("/");
+  revalidatePath("/workouts");
+  revalidatePath("/today");
   return workout;
 }
 
 export async function getActiveWorkout() {
+  noStore();
   const userId = await getSessionUserId();
+  
+  // Only consider workouts created in the last 12 hours as "active"
+  const twelveHoursAgo = new Date();
+  twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 12);
+
   return prisma.workout.findFirst({
     where: { 
       userId,
-      endTime: null
+      endTime: null,
+      date: {
+        gte: twelveHoursAgo
+      }
     },
     include: {
       sets: {
@@ -87,6 +99,9 @@ export async function finishWorkout(workoutId: string) {
     where: { id: workoutId, userId },
     data: { endTime: new Date() }
   });
+  revalidatePath("/");
+  revalidatePath("/workouts");
+  revalidatePath("/today");
 }
 
 export async function addSetToWorkout(workoutId: string, exerciseId: string, setNumber: number, weight: number, reps: number, isDropSet: boolean = false) {
