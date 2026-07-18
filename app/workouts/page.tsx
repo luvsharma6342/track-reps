@@ -12,6 +12,7 @@ export default function WorkoutPage() {
   const router = useRouter();
   const [workoutId, setWorkoutId] = useState<string | null>(null);
   const [isStarting, setIsStarting] = useState(false);
+  const [isFinishing, setIsFinishing] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
   const [exercises, setExercises] = useState<any[]>([]);
   
@@ -91,6 +92,7 @@ export default function WorkoutPage() {
   };
 
   const handleFinishWorkout = async () => {
+    setIsFinishing(true);
     if (workoutId) {
       await finishWorkout(workoutId);
     }
@@ -186,8 +188,10 @@ export default function WorkoutPage() {
           </h1>
           <button 
             onClick={handleFinishWorkout}
-            className="text-sm font-semibold bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition"
+            disabled={isFinishing}
+            className="text-sm font-semibold bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition flex items-center gap-2 disabled:opacity-50"
           >
+            {isFinishing && <Loader2 className="w-4 h-4 animate-spin" />}
             Finish
           </button>
         </div>
