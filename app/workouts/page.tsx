@@ -205,10 +205,7 @@ export default function WorkoutPage() {
                   <span className="text-xs text-primary">{activeEx.bodyPart}</span>
                 </div>
                 <button 
-                  onClick={async () => {
-                    await deleteTodaysExerciseSets(activeEx.id);
-                    setActiveExercises(activeExercises.filter(ex => ex.id !== activeEx.id));
-                  }}
+                  onClick={() => handleDeleteExercise(activeEx.id)}
                   className="w-8 h-8 flex items-center justify-center text-red-500 hover:bg-red-500/20 bg-red-500/10 rounded-xl transition"
                   title="Remove Exercise"
                 >
