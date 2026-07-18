@@ -340,3 +340,60 @@ export async function removeExerciseFromWorkout(workoutId: string, exerciseId: s
     where: { workoutId, exerciseId }
   });
 }
+
+export async function logBodyMetrics(dateIso: string, metrics: {
+  weight?: number;
+  bodyFatPercent?: number;
+}) {
+  const userId = await getSessionUserId();
+  const date = new Date(dateIso);
+  date.setHours(0, 0, 0, 0); // Normalize to start of day
+
+  // Check if a metric entry already exists for this exact date
+  const existing = await prisma.bodyMetric.findFirst({
+    where: {
+      userId,
+      date,
+    }
+  });
+
+  if (existing) {
+    return prisma.bodyMetric.update({
+      where: { id: existing.id },
+      data: metrics
+    });
+  }
+
+  return prisma.bodyMetric.create({
+    data: {
+      userId,
+      date,
+      ...metrics
+    }
+  });
+}
+
+export async function getBodyMetrics() {
+  const userId = await getSessionUserId();
+  
+  return prisma.bodyMetric.findMany({
+    where: { userId },
+    orderBy: { date: 'asc' } // Oldest to newest for charting
+  });
+}
+
+export async function deleteBodyMetrics(id: string) {
+  const userId = await getSessionUserId();
+  
+  const metric = await prisma.bodyMetric.findUnique({
+    where: { id }
+  });
+
+  if (!metric || metric.userId !== userId) {
+    throw new Error("Not authorized or metric not found");
+  }
+
+  await prisma.bodyMetric.delete({
+    where: { id }
+  });
+}

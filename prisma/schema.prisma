@@ -20,6 +20,7 @@ model User {
   // App relations
   exercises Exercise[]
   workouts  Workout[]
+  metrics   BodyMetric[]
 
   @@map("user")
 }
@@ -113,4 +114,16 @@ model WorkoutExercise {
   createdAt  DateTime @default(now())
 
   @@unique([workoutId, exerciseId])
+}
+
+model BodyMetric {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      DateTime @default(now())
+  
+  weight          Float?
+  bodyFatPercent  Float?
+
+  @@index([userId, date])
 }

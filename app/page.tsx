@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Dumbbell, Activity, TrendingUp, Flame, Zap, Calendar, Play } from "lucide-react";
+import { Dumbbell, Activity, TrendingUp, Flame, Zap, Calendar, Play, Scale } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import { useState, useEffect } from "react";
 import { getActiveWorkout } from "@/app/actions";
@@ -56,7 +56,7 @@ export default function Dashboard() {
           </div>
 
           {/* Primary Call to Action */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-24 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 mb-24 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
             <Link href="/workouts" className="w-full sm:w-auto">
               {hasActiveWorkout ? (
                 <button 
@@ -92,6 +92,15 @@ export default function Dashboard() {
                 Today's Session
               </button>
             </Link>
+
+            <Link href="/metrics" className="w-full sm:w-auto">
+              <button 
+                className="w-full sm:w-auto px-8 py-4 glass text-white font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all border border-white/10 hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(45,212,191,0.2)] hover:bg-white/10 hover:scale-105 active:scale-95"
+              >
+                <Scale className="w-5 h-5 text-teal-400" />
+                Body Metrics
+              </button>
+            </Link>
           </div>
 
           {/* Features Grid */}
@@ -125,8 +134,7 @@ export default function Dashboard() {
               <p className="text-gray-400 text-sm leading-relaxed">
                 View your complete exercise history at a glance. See your past performance to beat it today.
               </p>
-            </div>
-
+          </div>
           </div>
 
         </div>
