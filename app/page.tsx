@@ -135,6 +135,7 @@ export default function Dashboard() {
                 View your complete exercise history at a glance. See your past performance to beat it today.
               </p>
           </div>
+          </div>
 
           {/* Footer */}
           <div className="mt-24 pt-8 pb-4 border-t border-white/5 flex flex-col items-center justify-center gap-2 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
