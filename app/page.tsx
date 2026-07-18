@@ -135,6 +135,15 @@ export default function Dashboard() {
                 View your complete exercise history at a glance. See your past performance to beat it today.
               </p>
           </div>
+
+          {/* Footer */}
+          <div className="mt-24 pt-8 pb-4 border-t border-white/5 flex flex-col items-center justify-center gap-2 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+            <p className="text-gray-400 text-sm">
+              Designed and Built by <span className="text-white font-medium">Luv Sharma</span>
+            </p>
+            <a href="mailto:luvsharma105@gmail.com" className="text-gray-500 text-xs hover:text-primary transition-colors">
+              luvsharma105@gmail.com
+            </a>
           </div>
 
         </div>
