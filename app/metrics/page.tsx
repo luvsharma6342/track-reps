@@ -11,6 +11,7 @@ export default function MetricsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+  const [metricToDelete, setMetricToDelete] = useState<string | null>(null);
 
   // Form states
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
@@ -58,12 +59,11 @@ export default function MetricsPage() {
     showToast("Metrics saved!");
   };
 
-  const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this entry?")) {
-      await deleteBodyMetrics(id);
-      await loadData();
-      showToast("Metrics deleted!");
-    }
+  const handleDeleteConfirm = async (id: string) => {
+    await deleteBodyMetrics(id);
+    await loadData();
+    setMetricToDelete(null);
+    showToast("Metrics deleted!");
   };
 
   // Format data for chart
@@ -229,7 +229,7 @@ export default function MetricsPage() {
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button 
-                          onClick={() => handleDelete(m.id)}
+                          onClick={() => setMetricToDelete(m.id)}
                           className="p-2 bg-white/5 hover:bg-red-500/20 hover:text-red-400 rounded-lg transition-all"
                           title="Delete"
                         >
@@ -247,6 +247,35 @@ export default function MetricsPage() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {metricToDelete && (
+        <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4">
+           <div className="bg-[#0f0f16] border border-white/10 rounded-3xl p-6 max-w-sm w-full animate-scale-in">
+             <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mb-4 text-red-400">
+               <Trash2 className="w-6 h-6" />
+             </div>
+             <h3 className="text-xl font-bold mb-2 text-white">Delete Entry?</h3>
+             <p className="text-gray-400 mb-6 text-sm">
+               Are you sure you want to permanently delete this body metric entry? This action cannot be undone.
+             </p>
+             <div className="flex gap-3">
+               <button 
+                 onClick={() => setMetricToDelete(null)}
+                 className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-medium transition"
+               >
+                 Cancel
+               </button>
+               <button 
+                 onClick={() => handleDeleteConfirm(metricToDelete)}
+                 className="flex-1 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition"
+               >
+                 Delete
+               </button>
+             </div>
+           </div>
+        </div>
+      )}
     </div>
   );
 }
