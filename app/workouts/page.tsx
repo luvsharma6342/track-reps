@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Check, ArrowLeft, Search, Clock, History, Loader2 } from "lucide-react";
+import { Plus, Check, ArrowLeft, Search, Clock, History, Loader2, Trash2, Edit2, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { startWorkout, getExercises, addSetToWorkout, getPreviousSession, createExercise } from "@/app/actions";
+import { startWorkout, getExercises, addSetToWorkout, getPreviousSession, createExercise, deleteTodaysExerciseSets, updateSet, deleteSet } from "@/app/actions";
 
 const BODY_PARTS = ["Chest", "Back", "Legs", "Arms", "Shoulders", "Core", "Cardio", "Biceps", "Triceps"];
 
@@ -145,9 +145,21 @@ export default function WorkoutPage() {
               className="glass-card rounded-2xl overflow-hidden animate-fade-in-up"
               style={{ animationDelay: `${exIndex * 100}ms` }}
             >
-              <div className="p-4 border-b border-white/5 bg-white/5">
-                <h2 className="font-bold text-lg text-white">{activeEx.name}</h2>
-                <span className="text-xs text-primary">{activeEx.bodyPart}</span>
+              <div className="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
+                <div>
+                  <h2 className="font-bold text-lg text-white">{activeEx.name}</h2>
+                  <span className="text-xs text-primary">{activeEx.bodyPart}</span>
+                </div>
+                <button 
+                  onClick={async () => {
+                    await deleteTodaysExerciseSets(activeEx.id);
+                    setActiveExercises(activeExercises.filter(ex => ex.id !== activeEx.id));
+                  }}
+                  className="w-8 h-8 flex items-center justify-center text-red-500 hover:bg-red-500/20 bg-red-500/10 rounded-xl transition"
+                  title="Remove Exercise"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
               </div>
               
               <div className="p-4 space-y-4">
@@ -171,20 +183,21 @@ export default function WorkoutPage() {
 
                 {/* Current Sets */}
                 {activeEx.sets.map((set: any, i: number) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-medium text-gray-400">
-                      {set.isDropSet ? <span className="text-orange-500 font-bold text-xs">D</span> : (i + 1)}
-                    </div>
-                    <div className="flex-1 bg-white/5 rounded-xl px-4 py-2 text-center text-white">
-                      {set.weight} kg
-                    </div>
-                    <div className="flex-1 bg-white/5 rounded-xl px-4 py-2 text-center text-white">
-                      {set.reps} reps
-                    </div>
-                    <div className="w-8 h-8 flex items-center justify-center text-green-500">
-                      <Check className="w-5 h-5" />
-                    </div>
-                  </div>
+                  <WorkoutSetRow
+                    key={set.id}
+                    set={set}
+                    index={i}
+                    onSave={(updatedSet) => {
+                      const newActive = [...activeExercises];
+                      newActive[exIndex].sets[i] = updatedSet;
+                      setActiveExercises(newActive);
+                    }}
+                    onDelete={() => {
+                      const newActive = [...activeExercises];
+                      newActive[exIndex].sets.splice(i, 1);
+                      setActiveExercises(newActive);
+                    }}
+                  />
                 ))}
 
                 {/* Add New Set Form */}
@@ -380,6 +393,104 @@ function AddSetForm({ workoutId, exerciseId, setNumber, onAdd }: { workoutId: st
       >
         {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-5 h-5" />}
       </button>
+    </div>
+  );
+}
+
+// Subcomponent for displaying and editing an active set
+function WorkoutSetRow({ set, index, onSave, onDelete }: { set: any, index: number, onSave: (updatedSet: any) => void, onDelete: () => void }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [weight, setWeight] = useState(set.weight.toString());
+  const [reps, setReps] = useState(set.reps.toString());
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    await updateSet(set.id, parseFloat(weight), parseInt(reps));
+    setIsEditing(false);
+    setIsSaving(false);
+    onSave({ ...set, weight: parseFloat(weight), reps: parseInt(reps) });
+  };
+
+  const handleDelete = async () => {
+    await deleteSet(set.id);
+    onDelete();
+  };
+
+  if (isEditing) {
+    return (
+      <div className="flex items-center gap-3">
+        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-medium text-gray-400 shrink-0">
+          {set.isDropSet ? <span className="text-orange-500 font-bold text-xs">D</span> : (index + 1)}
+        </div>
+        <div className="flex-1 relative">
+          <input 
+            type="number" 
+            value={weight}
+            onChange={e => setWeight(e.target.value)}
+            className="w-full bg-input border border-primary/50 rounded-xl px-4 py-2 text-center text-white focus:border-primary outline-none"
+            placeholder="kg"
+            autoFocus
+          />
+        </div>
+        <div className="flex-1 relative">
+          <input 
+            type="number" 
+            value={reps}
+            onChange={e => setReps(e.target.value)}
+            className="w-full bg-input border border-primary/50 rounded-xl px-4 py-2 text-center text-white focus:border-primary outline-none"
+            placeholder="reps"
+          />
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <button 
+            onClick={handleSave}
+            disabled={isSaving}
+            className="w-8 h-8 flex items-center justify-center text-emerald-400 bg-emerald-400/10 rounded-xl hover:bg-emerald-400/20 transition disabled:opacity-50"
+          >
+            <Check className="w-4 h-4" />
+          </button>
+          <button 
+            onClick={() => {
+              setIsEditing(false);
+              setWeight(set.weight.toString());
+              setReps(set.reps.toString());
+            }}
+            disabled={isSaving}
+            className="w-8 h-8 flex items-center justify-center text-red-400 bg-red-400/10 rounded-xl hover:bg-red-400/20 transition disabled:opacity-50"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-3 group">
+      <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-medium text-gray-400 shrink-0">
+        {set.isDropSet ? <span className="text-orange-500 font-bold text-xs">D</span> : (index + 1)}
+      </div>
+      <div className="flex-1 bg-white/5 rounded-xl px-4 py-2 text-center text-white transition group-hover:bg-white/10">
+        {set.weight} kg
+      </div>
+      <div className="flex-1 bg-white/5 rounded-xl px-4 py-2 text-center text-white transition group-hover:bg-white/10">
+        {set.reps} reps
+      </div>
+      <div className="flex items-center gap-2 shrink-0 opacity-50 group-hover:opacity-100 transition">
+        <button 
+          onClick={() => setIsEditing(true)}
+          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white bg-white/5 rounded-xl transition"
+        >
+          <Edit2 className="w-4 h-4" />
+        </button>
+        <button 
+          onClick={handleDelete}
+          className="w-8 h-8 flex items-center justify-center text-red-400 hover:text-white bg-red-500/10 hover:bg-red-500/30 rounded-xl transition"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   );
 }
