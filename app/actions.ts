@@ -276,6 +276,40 @@ export async function getTodaysWorkouts(startIso?: string, endIso?: string) {
   });
 }
 
+export async function deleteTodaysExerciseSets(exerciseId: string) {
+  const userId = await getSessionUserId();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  await prisma.set.deleteMany({
+    where: {
+      exerciseId,
+      workout: {
+        userId,
+        date: {
+          gte: today,
+          lt: tomorrow,
+        }
+      }
+    }
+  });
+
+  await prisma.workoutExercise.deleteMany({
+    where: {
+      exerciseId,
+      workout: {
+        userId,
+        date: {
+          gte: today,
+          lt: tomorrow,
+        }
+      }
+    }
+  });
+}
+
 export async function updateSet(setId: string, weight: number, reps: number) {
   await getSessionUserId(); // ensure auth
   
