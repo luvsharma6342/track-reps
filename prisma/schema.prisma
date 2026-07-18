@@ -81,10 +81,11 @@ model Exercise {
 }
 
 model Workout {
-  id     String   @id @default(uuid())
-  userId String
-  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  date   DateTime @default(now())
+  id      String    @id @default(uuid())
+  userId  String
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date    DateTime  @default(now())
+  endTime DateTime?
 
   sets Set[]
 }

@@ -1,11 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { Dumbbell, Activity, TrendingUp, Flame, Zap, Calendar } from "lucide-react";
+import { Dumbbell, Activity, TrendingUp, Flame, Zap, Calendar, Play } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
+import { useState, useEffect } from "react";
+import { getActiveWorkout } from "@/app/actions";
 
 export default function Dashboard() {
   const { data: session, isPending } = useSession();
+  const [hasActiveWorkout, setHasActiveWorkout] = useState(false);
+
+  useEffect(() => {
+    getActiveWorkout().then(workout => {
+      setHasActiveWorkout(!!workout);
+    });
+  }, []);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#05050a]">
@@ -49,12 +58,21 @@ export default function Dashboard() {
           {/* Primary Call to Action */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-24 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
             <Link href="/workouts" className="w-full sm:w-auto">
-              <button 
-                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-indigo-500 to-fuchsia-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(139,92,246,0.5)] hover:shadow-[0_0_60px_rgba(139,92,246,0.7)] transition-all border border-white/10 hover:scale-105 active:scale-95"
-              >
-                <Zap className="w-5 h-5 fill-current text-yellow-300" />
-                Start a Workout
-              </button>
+              {hasActiveWorkout ? (
+                <button 
+                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(249,115,22,0.5)] hover:shadow-[0_0_60px_rgba(249,115,22,0.7)] transition-all border border-white/10 hover:scale-105 active:scale-95 animate-pulse"
+                >
+                  <Play className="w-5 h-5 fill-current text-white" />
+                  Resume Workout
+                </button>
+              ) : (
+                <button 
+                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-indigo-500 to-fuchsia-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(139,92,246,0.5)] hover:shadow-[0_0_60px_rgba(139,92,246,0.7)] transition-all border border-white/10 hover:scale-105 active:scale-95"
+                >
+                  <Zap className="w-5 h-5 fill-current text-yellow-300" />
+                  Start a Workout
+                </button>
+              )}
             </Link>
             
             <Link href="/exercises" className="w-full sm:w-auto">

@@ -48,6 +48,13 @@ export async function getWorkouts() {
 
 export async function startWorkout() {
   const userId = await getSessionUserId();
+  
+  // Finish any lingering active workouts first
+  await prisma.workout.updateMany({
+    where: { userId, endTime: null },
+    data: { endTime: new Date() }
+  });
+
   const workout = await prisma.workout.create({
     data: {
       userId,
@@ -55,6 +62,31 @@ export async function startWorkout() {
     }
   });
   return workout;
+}
+
+export async function getActiveWorkout() {
+  const userId = await getSessionUserId();
+  return prisma.workout.findFirst({
+    where: { 
+      userId,
+      endTime: null
+    },
+    include: {
+      sets: {
+        include: { exercise: true },
+        orderBy: { setNumber: 'asc' }
+      }
+    },
+    orderBy: { date: "desc" }
+  });
+}
+
+export async function finishWorkout(workoutId: string) {
+  const userId = await getSessionUserId();
+  await prisma.workout.updateMany({
+    where: { id: workoutId, userId },
+    data: { endTime: new Date() }
+  });
 }
 
 export async function addSetToWorkout(workoutId: string, exerciseId: string, setNumber: number, weight: number, reps: number, isDropSet: boolean = false) {

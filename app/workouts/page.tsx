@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Plus, Check, ArrowLeft, Search, Clock, History, Loader2, Trash2, Edit2, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { startWorkout, getExercises, addSetToWorkout, getPreviousSession, createExercise, deleteTodaysExerciseSets, updateSet, deleteSet } from "@/app/actions";
+import { startWorkout, getExercises, addSetToWorkout, getPreviousSession, createExercise, deleteTodaysExerciseSets, updateSet, deleteSet, getActiveWorkout, finishWorkout } from "@/app/actions";
 
 const BODY_PARTS = ["Chest", "Back", "Legs", "Arms", "Shoulders", "Core", "Cardio", "Biceps", "Triceps"];
 
@@ -12,6 +12,7 @@ export default function WorkoutPage() {
   const router = useRouter();
   const [workoutId, setWorkoutId] = useState<string | null>(null);
   const [isStarting, setIsStarting] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
   const [exercises, setExercises] = useState<any[]>([]);
   
   // Active state for the workout
@@ -28,6 +29,28 @@ export default function WorkoutPage() {
 
   useEffect(() => {
     getExercises().then(setExercises);
+    getActiveWorkout().then(async active => {
+      if (active) {
+        setWorkoutId(active.id);
+        const grouped = new Map();
+        for (const set of active.sets) {
+           if (!grouped.has(set.exerciseId)) {
+             grouped.set(set.exerciseId, {
+               ...set.exercise,
+               sets: [],
+             });
+           }
+           grouped.get(set.exerciseId).sets.push(set);
+        }
+        const reconstructed = Array.from(grouped.values());
+        for (const ex of reconstructed) {
+          const prev = await getPreviousSession(ex.id);
+          ex.previousSets = prev || [];
+        }
+        setActiveExercises(reconstructed);
+      }
+      setIsInitializing(false);
+    });
   }, []);
 
   const handleStartWorkout = async () => {
@@ -37,7 +60,10 @@ export default function WorkoutPage() {
     setIsStarting(false);
   };
 
-  const handleFinishWorkout = () => {
+  const handleFinishWorkout = async () => {
+    if (workoutId) {
+      await finishWorkout(workoutId);
+    }
     router.push("/");
   };
 
@@ -69,6 +95,15 @@ export default function WorkoutPage() {
     const notActive = !activeExercises.find(a => a.id === ex.id);
     return matchesSearch && matchesTag && notActive;
   });
+
+  if (isInitializing) {
+    return (
+      <div className="relative min-h-screen overflow-hidden bg-[#05050a] flex flex-col items-center justify-center p-6 text-center">
+         <Loader2 className="w-10 h-10 animate-spin text-primary mx-auto mb-4" />
+         <p className="text-gray-400 font-medium">Loading session...</p>
+      </div>
+    );
+  }
 
   if (!workoutId) {
     return (
