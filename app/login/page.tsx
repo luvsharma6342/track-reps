@@ -66,14 +66,14 @@ export default function LoginPage() {
       >
         <div className="text-center mb-8">
           <div
-            className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-black/50 border border-white/10 animate-scale-in"
+            className="w-16 h-16 bg-muted rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-black/10 dark:shadow-black/50 border border-border animate-scale-in"
           >
             <Dumbbell className="w-8 h-8 text-primary" />
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
             {isLogin ? "Welcome back" : "Create an account"}
           </h1>
-          <p className="text-gray-400">
+          <p className="text-muted-foreground">
             {isLogin ? "Sign in to track your reps" : "Start your fitness journey today"}
           </p>
         </div>
@@ -82,15 +82,15 @@ export default function LoginPage() {
           <form onSubmit={handleEmailSubmit} className="space-y-4">
             {!isLogin && (
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider pl-1">Name</label>
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pl-1">Name</label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <input
                     type="text"
                     required={!isLogin}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+                    className="w-full bg-input border border-border rounded-2xl pl-12 pr-4 py-4 text-foreground focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
                     placeholder="John Doe"
                   />
                 </div>
@@ -98,30 +98,30 @@ export default function LoginPage() {
             )}
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider pl-1">Email</label>
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pl-1">Email</label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-black/40 border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+                  className="w-full bg-input border border-border rounded-2xl pl-12 pr-4 py-4 text-foreground focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
                   placeholder="you@example.com"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider pl-1">Password</label>
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pl-1">Password</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-black/40 border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+                  className="w-full bg-input border border-border rounded-2xl pl-12 pr-4 py-4 text-foreground focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
                   placeholder="••••••••"
                 />
               </div>
@@ -136,7 +136,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-4 mt-2 bg-primary text-white rounded-2xl font-bold hover:bg-primary/90 transition shadow-lg shadow-primary/20 flex justify-center items-center group disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full py-4 mt-2 bg-primary text-primary-foreground rounded-2xl font-bold hover:bg-primary/90 transition shadow-lg shadow-primary/20 flex justify-center items-center group disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isLoading ? "Please wait..." : isLogin ? "Sign In" : "Sign Up"}
               {!isLoading && <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />}
@@ -145,17 +145,17 @@ export default function LoginPage() {
 
           <div className="mt-8 relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-white/10"></div>
+              <div className="w-full border-t border-border"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-[#111111] text-gray-500">Or continue with</span>
+              <span className="px-4 bg-background text-muted-foreground">Or continue with</span>
             </div>
           </div>
 
           <button
             onClick={handleGoogleSignIn}
             disabled={isLoading}
-            className="w-full mt-6 py-4 bg-white/5 border border-white/10 text-white rounded-2xl font-medium hover:bg-white/10 transition flex justify-center items-center disabled:opacity-70 disabled:cursor-not-allowed"
+            className="w-full mt-6 py-4 bg-muted border border-border text-foreground rounded-2xl font-medium hover:bg-secondary transition flex justify-center items-center disabled:opacity-70 disabled:cursor-not-allowed"
           >
             <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
               <path
@@ -179,7 +179,7 @@ export default function LoginPage() {
           </button>
         </div>
 
-        <p className="text-center mt-8 text-gray-400">
+        <p className="text-center mt-8 text-muted-foreground">
           {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
           <button
             onClick={() => {
