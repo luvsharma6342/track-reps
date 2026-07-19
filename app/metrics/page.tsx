@@ -187,16 +187,16 @@ export default function MetricsPage() {
                   <div className="h-64 w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: -20 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#888888" strokeOpacity={0.2} vertical={false} />
                         <XAxis 
                           dataKey="name" 
-                          stroke="rgba(255,255,255,0.5)" 
+                          stroke="#888888" 
                           fontSize={12} 
                           tickLine={false}
                           axisLine={false}
                         />
                         <YAxis 
-                          stroke="rgba(255,255,255,0.5)" 
+                          stroke="#888888" 
                           fontSize={12} 
                           tickLine={false}
                           axisLine={false}
