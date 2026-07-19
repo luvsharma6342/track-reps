@@ -44,7 +44,7 @@ export default function Dashboard() {
 
           {/* Hero Section */}
           <div className="mb-8 mt-4 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-            <span className="inline-block py-1 px-3 rounded-full bg-gradient-to-r from-blue-500/20 to-sky-500/20 border border-sky-500/30 text-blue-700 dark:text-sky-300 text-sm font-bold tracking-widest mb-6 uppercase shadow-[0_0_15px_rgba(14,165,233,0.2)]">
+            <span className="inline-block py-1 px-3 rounded-full bg-gradient-to-r from-blue-100 to-sky-100 dark:from-blue-500/20 dark:to-sky-500/20 border border-blue-200 dark:border-sky-500/30 text-blue-900 dark:text-sky-300 text-sm font-bold tracking-widest mb-6 uppercase shadow-[0_0_15px_rgba(14,165,233,0.1)] dark:shadow-[0_0_15px_rgba(14,165,233,0.2)]">
               Redefine Your Limits
             </span>
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-400 drop-shadow-sm">
