@@ -19,6 +19,7 @@ export default function WorkoutPage() {
   // Active state for the workout
   const [activeExercises, setActiveExercises] = useState<any[]>([]);
   const [deletingExerciseId, setDeletingExerciseId] = useState<string | null>(null);
+  const [addingExerciseId, setAddingExerciseId] = useState<string | null>(null);
   
   // Modal and new exercise state
   const [isCreatingExercise, setIsCreatingExercise] = useState(false);
@@ -77,12 +78,14 @@ export default function WorkoutPage() {
   };
 
   const handleAddExercise = async (exercise: any) => {
+    setAddingExerciseId(exercise.id);
     if (workoutId) {
       await addExerciseToWorkout(workoutId, exercise.id);
     }
     const previousSets = await getPreviousSession(exercise.id);
     setActiveExercises([...activeExercises, { ...exercise, sets: [], previousSets: previousSets || [] }]);
     setSearch("");
+    setAddingExerciseId(null);
   };
 
   const handleDeleteExercise = async (exerciseId: string) => {
@@ -312,13 +315,18 @@ export default function WorkoutPage() {
                 <button 
                   key={ex.id}
                   onClick={() => handleAddExercise(ex)}
-                  className="w-full text-left p-4 rounded-xl glass border border-white/5 hover:border-primary/30 transition flex items-center justify-between group"
+                  disabled={addingExerciseId === ex.id}
+                  className="w-full text-left p-4 rounded-xl glass border border-white/5 hover:border-primary/30 transition flex items-center justify-between group disabled:opacity-50"
                 >
                   <div>
                     <div className="font-medium text-white">{ex.name}</div>
                     <div className="text-xs text-gray-400 mt-1">{ex.bodyPart}</div>
                   </div>
-                  <Plus className="w-5 h-5 text-primary opacity-0 group-hover:opacity-100 transition" />
+                  {addingExerciseId === ex.id ? (
+                    <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                  ) : (
+                    <Plus className="w-5 h-5 text-primary opacity-0 group-hover:opacity-100 transition" />
+                  )}
                 </button>
               ))}
               
