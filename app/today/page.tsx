@@ -4,8 +4,12 @@ import { useEffect, useState } from "react";
 import { getTodaysWorkouts, updateSet, deleteSet, deleteTodaysExerciseSets } from "@/app/actions";
 import { ArrowLeft, Calendar, Dumbbell, Check, Edit2, X, Trash2, AlertTriangle, Loader2, Link as LinkIcon } from "lucide-react";
 import Link from "next/link";
+import { useSession } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export default function TodaysSessionPage() {
+  const { data: session, isPending: isAuthPending } = useSession();
+  const router = useRouter();
   const [workouts, setWorkouts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,6 +38,20 @@ export default function TodaysSessionPage() {
   useEffect(() => {
     fetchWorkouts();
   }, []);
+
+  useEffect(() => {
+    if (!isAuthPending && !session) {
+      router.push("/login");
+    }
+  }, [session, isAuthPending, router]);
+
+  if (isAuthPending || !session) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
+  }
 
   const confirmDelete = async () => {
     if (!deleteConf) return;

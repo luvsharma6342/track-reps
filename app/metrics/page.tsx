@@ -5,8 +5,12 @@ import { getBodyMetrics, logBodyMetrics, deleteBodyMetrics } from "@/app/actions
 import Link from "next/link";
 import { ArrowLeft, Activity, Save, Check, Scale, Ruler, Trash2, Edit2, Loader2 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { useSession } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export default function MetricsPage() {
+  const { data: session, isPending: isAuthPending } = useSession();
+  const router = useRouter();
   const [metrics, setMetrics] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -44,6 +48,20 @@ export default function MetricsPage() {
   useEffect(() => {
     loadData();
   }, [date]);
+
+  useEffect(() => {
+    if (!isAuthPending && !session) {
+      router.push("/login");
+    }
+  }, [session, isAuthPending, router]);
+
+  if (isAuthPending || !session) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
+  }
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();

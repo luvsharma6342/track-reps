@@ -5,10 +5,12 @@ import { Plus, Check, ArrowLeft, Search, Clock, History, Loader2, Trash2, Edit2,
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { startWorkout, getExercises, addSetToWorkout, getPreviousSession, createExercise, removeExerciseFromWorkout, updateSet, deleteSet, getActiveWorkout, finishWorkout, addExerciseToWorkout } from "@/app/actions";
+import { useSession } from "@/lib/auth-client";
 
 const BODY_PARTS = ["Chest", "Back", "Legs", "Arms", "Shoulders", "Core", "Cardio", "Biceps", "Triceps"];
 
 export default function WorkoutPage() {
+  const { data: session, isPending: isAuthPending } = useSession();
   const router = useRouter();
   const [workoutId, setWorkoutId] = useState<string | null>(null);
   const [isStarting, setIsStarting] = useState(false);
@@ -69,6 +71,20 @@ export default function WorkoutPage() {
       setIsInitializing(false);
     });
   }, []);
+
+  useEffect(() => {
+    if (!isAuthPending && !session) {
+      router.push("/login");
+    }
+  }, [session, isAuthPending, router]);
+
+  if (isAuthPending || !session) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
+  }
 
   const handleStartWorkout = async () => {
     setIsStarting(true);

@@ -4,10 +4,14 @@ import { useState, useEffect } from "react";
 import { Plus, Search, Dumbbell, ArrowLeft, History, X, Calendar, Trash2, Edit2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { createExercise, getExercises, getExerciseHistory, deleteExercise, renameExercise } from "@/app/actions";
+import { useSession } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const BODY_PARTS = ["Chest", "Back", "Legs", "Arms", "Shoulders", "Core", "Cardio", "Biceps", "Triceps"];
 
 export default function ExercisesPage() {
+  const { data: session, isPending: isAuthPending } = useSession();
+  const router = useRouter();
   const [exercises, setExercises] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -29,6 +33,20 @@ export default function ExercisesPage() {
   useEffect(() => {
     getExercises().then(setExercises);
   }, []);
+
+  useEffect(() => {
+    if (!isAuthPending && !session) {
+      router.push("/login");
+    }
+  }, [session, isAuthPending, router]);
+
+  if (isAuthPending || !session) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
+  }
 
   const handleCreate = async () => {
     if (!newExerciseName.trim()) return;

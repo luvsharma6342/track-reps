@@ -57,7 +57,7 @@ export default function Dashboard() {
 
           {/* Primary Call to Action */}
           <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 mb-24 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-            <Link href="/workouts" className="w-full sm:w-auto">
+            <Link href={session ? "/workouts" : "/login"} className="w-full sm:w-auto">
               {hasActiveWorkout ? (
                 <button 
                   className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(14,165,233,0.5)] hover:shadow-[0_0_60px_rgba(14,165,233,0.7)] transition-all border border-white/10 hover:scale-105 active:scale-95 animate-pulse"
@@ -75,7 +75,7 @@ export default function Dashboard() {
               )}
             </Link>
             
-            <Link href="/exercises" className="w-full sm:w-auto">
+            <Link href={session ? "/exercises" : "/login"} className="w-full sm:w-auto">
               <button 
                 className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] hover:bg-muted hover:scale-105 active:scale-95"
               >
@@ -84,7 +84,7 @@ export default function Dashboard() {
               </button>
             </Link>
 
-            <Link href="/today" className="w-full sm:w-auto">
+            <Link href={session ? "/today" : "/login"} className="w-full sm:w-auto">
               <button 
                 className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-emerald-400/50 hover:shadow-[0_0_20px_rgba(52,211,153,0.2)] hover:bg-muted hover:scale-105 active:scale-95"
               >
@@ -93,7 +93,7 @@ export default function Dashboard() {
               </button>
             </Link>
 
-            <Link href="/metrics" className="w-full sm:w-auto">
+            <Link href={session ? "/metrics" : "/login"} className="w-full sm:w-auto">
               <button 
                 className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(45,212,191,0.2)] hover:bg-muted hover:scale-105 active:scale-95"
               >
