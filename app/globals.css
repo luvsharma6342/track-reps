@@ -43,6 +43,8 @@
   --border: #e2e8f0;
   --input: #f1f5f9;
   --ring: #3b82f6;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
   --radius: 0.75rem;
 }
 
@@ -59,9 +61,11 @@
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: #334155;
+  --border: rgba(255, 255, 255, 0.1);
   --input: #1e293b;
   --ring: #3b82f6;
+  --muted: rgba(255, 255, 255, 0.05);
+  --muted-foreground: #9ca3af;
 }
 
 body {

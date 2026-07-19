@@ -99,7 +99,7 @@ export default function ExercisesPage() {
   });
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#05050a]">
+    <div className="relative min-h-screen overflow-hidden bg-background">
       {/* Dynamic Multi-Color Background */}
       <div 
         className="absolute inset-0 w-full h-full opacity-50 pointer-events-none z-0 fixed"
@@ -115,7 +115,7 @@ export default function ExercisesPage() {
 
       <div className="relative z-10 min-h-screen p-6 max-w-2xl mx-auto pb-24">
         <div className="flex items-center mb-8">
-        <Link href="/" className="mr-4 p-2 rounded-full hover:bg-white/10 transition">
+        <Link href="/" className="mr-4 p-2 rounded-full hover:bg-muted transition">
           <ArrowLeft className="w-6 h-6" />
         </Link>
         <h1 className="text-3xl font-bold tracking-tight">Exercise Library</h1>
@@ -123,20 +123,20 @@ export default function ExercisesPage() {
 
       <div className="mb-6 space-y-4">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
           <input 
             type="text" 
             placeholder="Search exercises..." 
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full bg-input rounded-xl pl-10 pr-4 py-3 text-white border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+            className="w-full bg-input rounded-xl pl-10 pr-4 py-3 text-foreground border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
           />
         </div>
 
         <div className="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
           <button 
             onClick={() => setSelectedTag(null)}
-            className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-medium transition ${!selectedTag ? 'bg-primary text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}
+            className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-medium transition ${!selectedTag ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
           >
             All
           </button>
@@ -144,7 +144,7 @@ export default function ExercisesPage() {
             <button 
               key={part}
               onClick={() => setSelectedTag(part)}
-              className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-medium transition ${selectedTag === part ? 'bg-primary text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}
+              className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-medium transition ${selectedTag === part ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
             >
               {part}
             </button>
@@ -154,7 +154,7 @@ export default function ExercisesPage() {
 
       <div className="space-y-3">
         {filteredExercises.length === 0 ? (
-          <div className="text-center py-12 text-gray-400 glass rounded-2xl">
+          <div className="text-center py-12 text-muted-foreground glass rounded-2xl">
             <Dumbbell className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p>No exercises found.</p>
             {search && (
@@ -174,17 +174,17 @@ export default function ExercisesPage() {
             <div 
               key={ex.id}
               onClick={() => handleViewHistory(ex)}
-              className="glass p-4 rounded-xl flex items-center justify-between cursor-pointer hover:bg-white/5 transition border border-white/5 hover:border-primary/20 animate-scale-in"
+              className="glass p-4 rounded-xl flex items-center justify-between cursor-pointer hover:bg-secondary transition border-border hover:border-primary/20 animate-scale-in"
               style={{ animationDelay: `${index * 50}ms` }}
             >
               <div>
-                <h3 className="font-semibold text-white">{ex.name}</h3>
+                <h3 className="font-semibold text-foreground">{ex.name}</h3>
                 <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-full mt-1 inline-block">
                   {ex.bodyPart}
                 </span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400">
+                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground">
                   <History className="w-4 h-4" />
                 </div>
                 <button 
@@ -215,7 +215,7 @@ export default function ExercisesPage() {
 
       <button 
         onClick={() => setIsModalOpen(true)}
-        className="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-primary/30 z-40 active:scale-95 transition-transform"
+        className="fixed bottom-8 right-8 w-14 h-14 bg-primary text-primary-foreground rounded-full flex items-center justify-center shadow-lg shadow-primary/30 z-40 active:scale-95 transition-transform"
       >
         <Plus className="w-6 h-6" />
       </button>
@@ -228,23 +228,23 @@ export default function ExercisesPage() {
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Exercise Name</label>
+                <label className="block text-sm font-medium text-muted-foreground mb-1">Exercise Name</label>
                 <input 
                   type="text" 
                   value={newExerciseName}
                   onChange={e => setNewExerciseName(e.target.value)}
-                  className="w-full bg-input rounded-xl px-4 py-3 text-white border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                  className="w-full bg-input rounded-xl px-4 py-3 text-foreground border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                   placeholder="e.g. Bench Press"
                   autoFocus
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Body Part</label>
+                <label className="block text-sm font-medium text-muted-foreground mb-1">Body Part</label>
                 <select 
                   value={newExerciseBodyPart}
                   onChange={e => setNewExerciseBodyPart(e.target.value)}
-                  className="w-full bg-input rounded-xl px-4 py-3 text-white border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none"
+                  className="w-full bg-input rounded-xl px-4 py-3 text-foreground border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none"
                 >
                   {BODY_PARTS.map(part => (
                     <option key={part} value={part}>{part}</option>
@@ -255,13 +255,13 @@ export default function ExercisesPage() {
               <div className="flex space-x-3 pt-4">
                 <button 
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-3 rounded-xl font-medium text-gray-300 hover:bg-white/5 transition"
+                  className="flex-1 py-3 rounded-xl font-medium text-muted-foreground hover:bg-muted transition"
                 >
                   Cancel
                 </button>
                 <button 
                   onClick={handleCreate}
-                  className="flex-1 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition shadow-lg shadow-primary/20"
+                  className="flex-1 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition shadow-lg shadow-primary/20"
                 >
                   Save Exercise
                 </button>
@@ -275,16 +275,16 @@ export default function ExercisesPage() {
       {selectedExerciseHistory && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex flex-col justify-end sm:justify-center p-0 sm:p-4 z-50 animate-fade-in">
           <div className="glass-card w-full sm:max-w-md mx-auto rounded-t-3xl sm:rounded-3xl h-[85vh] sm:h-[650px] flex flex-col overflow-hidden animate-slide-up sm:animate-scale-in">
-            <div className="p-5 border-b border-white/10 flex justify-between items-start bg-white/5">
+            <div className="p-5 border-b border-border flex justify-between items-start bg-muted">
               <div>
-                <h2 className="text-xl font-bold text-white mb-1">{selectedExerciseHistory.name}</h2>
+                <h2 className="text-xl font-bold text-foreground mb-1">{selectedExerciseHistory.name}</h2>
                 <span className="text-xs font-semibold text-primary uppercase tracking-wider">
                   {selectedExerciseHistory.bodyPart} • History
                 </span>
               </div>
               <button 
                 onClick={() => setSelectedExerciseHistory(null)} 
-                className="p-2 bg-white/5 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition"
+                className="p-2 bg-muted rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -292,12 +292,12 @@ export default function ExercisesPage() {
 
             <div className="flex-1 overflow-y-auto p-5 space-y-6">
               {isHistoryLoading ? (
-                <div className="flex flex-col items-center justify-center h-full text-gray-400">
+                <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
                   <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
                   <p>Loading history...</p>
                 </div>
               ) : exerciseHistoryData.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full text-gray-500 text-center">
+                <div className="flex flex-col items-center justify-center h-full text-muted-foreground text-center">
                   <History className="w-12 h-12 mb-3 opacity-20" />
                   <p>No workouts recorded yet.</p>
                   <p className="text-sm mt-1">Start a workout to log your first sets!</p>
@@ -306,24 +306,24 @@ export default function ExercisesPage() {
                 exerciseHistoryData.map((workoutData, idx) => (
                   <div key={workoutData.workoutId} className="relative">
                     {idx !== exerciseHistoryData.length - 1 && (
-                      <div className="absolute left-4 top-8 bottom-[-24px] w-0.5 bg-white/5 z-0"></div>
+                      <div className="absolute left-4 top-8 bottom-[-24px] w-0.5 bg-border z-0"></div>
                     )}
                     <div className="flex items-center gap-3 mb-3 relative z-10">
                       <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 text-primary">
                         <Calendar className="w-4 h-4" />
                       </div>
-                      <h3 className="font-semibold text-white">
+                      <h3 className="font-semibold text-foreground">
                         {new Date(workoutData.date).toLocaleDateString(undefined, {
                           weekday: 'short', month: 'short', day: 'numeric', year: 'numeric'
                         })}
                       </h3>
                     </div>
                     
-                    <div className="ml-11 glass rounded-2xl p-4 border border-white/5 space-y-2">
+                    <div className="ml-11 glass rounded-2xl p-4 border border-border space-y-2">
                       {workoutData.sets.map((set: any) => (
                         <div key={set.id} className="flex justify-between items-center text-sm">
-                          <span className="text-gray-400 font-medium">Set {set.setNumber}</span>
-                          <span className="text-white font-semibold">{set.weight} kg × {set.reps} reps</span>
+                          <span className="text-muted-foreground font-medium">Set {set.setNumber}</span>
+                          <span className="text-foreground font-semibold">{set.weight} kg × {set.reps} reps</span>
                         </div>
                       ))}
                     </div>
@@ -342,23 +342,23 @@ export default function ExercisesPage() {
             <div className="w-16 h-16 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center mx-auto mb-4">
               <Trash2 className="w-8 h-8" />
             </div>
-            <h2 className="text-xl font-bold mb-2 text-white">Delete Exercise?</h2>
-            <p className="text-gray-400 text-sm mb-6">
-              Are you sure you want to delete <strong className="text-white">{exerciseToDelete.name}</strong>? All associated workout history will be lost forever.
+            <h2 className="text-xl font-bold mb-2 text-foreground">Delete Exercise?</h2>
+            <p className="text-muted-foreground text-sm mb-6">
+              Are you sure you want to delete <strong className="text-foreground">{exerciseToDelete.name}</strong>? All associated workout history will be lost forever.
             </p>
             
             <div className="flex space-x-3">
               <button 
                 onClick={() => setExerciseToDelete(null)}
                 disabled={isDeleting}
-                className="flex-1 py-3 rounded-xl font-medium text-gray-300 bg-white/5 hover:bg-white/10 transition disabled:opacity-50"
+                className="flex-1 py-3 rounded-xl font-medium text-muted-foreground bg-muted hover:bg-secondary transition disabled:opacity-50"
               >
                 Cancel
               </button>
               <button 
                 onClick={executeDelete}
                 disabled={isDeleting}
-                className="flex-1 py-3 rounded-xl font-bold text-white bg-red-500 hover:bg-red-600 transition shadow-lg shadow-red-500/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                className="flex-1 py-3 rounded-xl font-bold text-destructive-foreground bg-destructive hover:bg-destructive/90 transition shadow-lg shadow-destructive/20 flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {isDeleting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Delete"}
               </button>
@@ -371,13 +371,13 @@ export default function ExercisesPage() {
       {exerciseToRename && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-[60] animate-fade-in">
           <div className="glass-card w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in">
-            <h2 className="text-xl font-bold mb-4 text-white text-center">Rename Exercise</h2>
+            <h2 className="text-xl font-bold mb-4 text-foreground text-center">Rename Exercise</h2>
             <div className="mb-6">
               <input 
                 type="text" 
                 value={renameValue}
                 onChange={e => setRenameValue(e.target.value)}
-                className="w-full bg-input rounded-xl px-4 py-3 text-white border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                className="w-full bg-input rounded-xl px-4 py-3 text-foreground border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                 placeholder="Exercise name"
                 autoFocus
               />
@@ -386,13 +386,13 @@ export default function ExercisesPage() {
             <div className="flex space-x-3">
               <button 
                 onClick={() => setExerciseToRename(null)}
-                className="flex-1 py-3 rounded-xl font-medium text-gray-300 bg-white/5 hover:bg-white/10 transition"
+                className="flex-1 py-3 rounded-xl font-medium text-muted-foreground bg-muted hover:bg-secondary transition"
               >
                 Cancel
               </button>
               <button 
                 onClick={executeRename}
-                className="flex-1 py-3 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition shadow-lg shadow-blue-500/20"
+                className="flex-1 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition shadow-lg shadow-primary/20"
               >
                 Save
               </button>

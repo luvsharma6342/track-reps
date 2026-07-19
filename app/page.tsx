@@ -17,7 +17,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#05050a]">
+    <div className="relative min-h-screen overflow-hidden bg-background">
       {/* Dynamic Multi-Color Background */}
       <div 
         className="absolute inset-0 w-full h-full opacity-70 pointer-events-none z-0 fixed"
@@ -36,7 +36,7 @@ export default function Dashboard() {
           {/* Personalized Greeting */}
           {!isPending && session?.user?.name && (
             <div className="mb-4 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
-              <span className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-white text-sm font-medium backdrop-blur-md shadow-lg">
+              <span className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-muted border border-border text-foreground text-sm font-medium backdrop-blur-md shadow-lg">
                 <span>👋</span> Hi, {session.user.name.split(' ')[0]}! Welcome back.
               </span>
             </div>
@@ -50,7 +50,7 @@ export default function Dashboard() {
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-400 drop-shadow-sm">
               Track Every Rep.<br/>Break Every Record.
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
               Your ultimate lifting companion. Log your heaviest sets, analyze your history, and build the custom routines you need to get stronger.
             </p>
           </div>
@@ -77,27 +77,27 @@ export default function Dashboard() {
             
             <Link href="/exercises" className="w-full sm:w-auto">
               <button 
-                className="w-full sm:w-auto px-8 py-4 glass text-white font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all border border-white/10 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] hover:bg-white/10 hover:scale-105 active:scale-95"
+                className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] hover:bg-muted hover:scale-105 active:scale-95"
               >
-                <Dumbbell className="w-5 h-5 text-cyan-400" />
+                <Dumbbell className="w-5 h-5 text-cyan-500" />
                 Manage Library
               </button>
             </Link>
 
             <Link href="/today" className="w-full sm:w-auto">
               <button 
-                className="w-full sm:w-auto px-8 py-4 glass text-white font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all border border-white/10 hover:border-emerald-400/50 hover:shadow-[0_0_20px_rgba(52,211,153,0.2)] hover:bg-white/10 hover:scale-105 active:scale-95"
+                className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-emerald-400/50 hover:shadow-[0_0_20px_rgba(52,211,153,0.2)] hover:bg-muted hover:scale-105 active:scale-95"
               >
-                <Calendar className="w-5 h-5 text-emerald-400" />
+                <Calendar className="w-5 h-5 text-emerald-500" />
                 Today's Session
               </button>
             </Link>
 
             <Link href="/metrics" className="w-full sm:w-auto">
               <button 
-                className="w-full sm:w-auto px-8 py-4 glass text-white font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all border border-white/10 hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(45,212,191,0.2)] hover:bg-white/10 hover:scale-105 active:scale-95"
+                className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(45,212,191,0.2)] hover:bg-muted hover:scale-105 active:scale-95"
               >
-                <Scale className="w-5 h-5 text-teal-400" />
+                <Scale className="w-5 h-5 text-teal-500" />
                 Body Metrics
               </button>
             </Link>
@@ -105,44 +105,42 @@ export default function Dashboard() {
 
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left animate-fade-in-up" style={{ animationDelay: '300ms' }}>
-            
-            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-blue-500/50 hover:bg-blue-950/20 transition-all duration-300 group shadow-lg hover:shadow-blue-500/10">
+                       <div className="glass-card p-6 rounded-3xl hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300 group shadow-lg hover:shadow-blue-500/10">
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-sky-600/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform border border-blue-500/30">
-                <Activity className="w-7 h-7 text-blue-400" />
+                <Activity className="w-7 h-7 text-blue-500" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">Build Routines</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">
+              <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-blue-500 transition-colors">Build Routines</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">
                 Add any exercise you can imagine. Tag them by body part, and quickly add them during your sessions.
               </p>
             </div>
 
-            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-sky-500/50 hover:bg-sky-950/20 transition-all duration-300 group shadow-lg hover:shadow-sky-500/10">
+            <div className="glass-card p-6 rounded-3xl hover:border-sky-500/50 hover:bg-sky-500/10 transition-all duration-300 group shadow-lg hover:shadow-sky-500/10">
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-500/20 to-cyan-600/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform border border-sky-500/30">
-                <Flame className="w-7 h-7 text-sky-400" />
+                <Flame className="w-7 h-7 text-sky-500" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-sky-300 transition-colors">Log Heavy Sets</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">
+              <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-sky-500 transition-colors">Log Heavy Sets</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">
                 Effortlessly record your weights and reps mid-workout. Stay focused on the lift, not the app.
               </p>
             </div>
 
-            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-cyan-500/50 hover:bg-cyan-950/20 transition-all duration-300 group shadow-lg hover:shadow-cyan-500/10">
+            <div className="glass-card p-6 rounded-3xl hover:border-cyan-500/50 hover:bg-cyan-500/10 transition-all duration-300 group shadow-lg hover:shadow-cyan-500/10">
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-teal-600/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform border border-cyan-500/30">
-                <TrendingUp className="w-7 h-7 text-cyan-400" />
+                <TrendingUp className="w-7 h-7 text-cyan-500" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">Track Progression</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">
+              <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-cyan-500 transition-colors">Track Progression</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">
                 View your complete exercise history at a glance. See your past performance to beat it today.
               </p>
-          </div>
-          </div>
+            </div>   </div>
 
           {/* Footer */}
-          <div className="mt-24 pt-8 pb-4 border-t border-white/5 flex flex-col items-center justify-center gap-2 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-            <p className="text-gray-400 text-sm">
-              Designed and Built by <span className="text-white font-medium">Luv Sharma</span>
+          <div className="mt-24 pt-8 pb-4 border-t border-border flex flex-col items-center justify-center gap-2 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+            <p className="text-muted-foreground text-sm">
+              Designed and Built by <span className="text-foreground font-medium">Luv Sharma</span>
             </p>
-            <a href="mailto:luvsharma105@gmail.com" className="text-gray-500 text-xs hover:text-primary transition-colors">
+            <a href="mailto:luvsharma105@gmail.com" className="text-muted-foreground text-xs hover:text-primary transition-colors">
               luvsharma105@gmail.com
             </a>
           </div>

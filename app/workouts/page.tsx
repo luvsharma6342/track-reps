@@ -125,16 +125,16 @@ export default function WorkoutPage() {
 
   if (isInitializing) {
     return (
-      <div className="relative min-h-screen overflow-hidden bg-[#05050a] flex flex-col items-center justify-center p-6 text-center">
+      <div className="relative min-h-screen overflow-hidden bg-background flex flex-col items-center justify-center p-6 text-center">
          <Loader2 className="w-10 h-10 animate-spin text-primary mx-auto mb-4" />
-         <p className="text-gray-400 font-medium">Loading session...</p>
+         <p className="text-muted-foreground font-medium">Loading session...</p>
       </div>
     );
   }
 
   if (!workoutId) {
     return (
-      <div className="relative min-h-screen overflow-hidden bg-[#05050a] flex flex-col items-center justify-center p-6 text-center">
+      <div className="relative min-h-screen overflow-hidden bg-background flex flex-col items-center justify-center p-6 text-center">
         {/* Dynamic Multi-Color Background */}
         <div 
           className="absolute inset-0 w-full h-full opacity-50 pointer-events-none z-0"
@@ -148,7 +148,7 @@ export default function WorkoutPage() {
           }}
         />
 
-        <Link href="/" className="absolute top-6 left-6 p-2 rounded-full hover:bg-white/10 transition z-10">
+        <Link href="/" className="absolute top-6 left-6 p-2 rounded-full hover:bg-muted transition z-10">
           <ArrowLeft className="w-6 h-6" />
         </Link>
         <div
@@ -158,11 +158,11 @@ export default function WorkoutPage() {
             <Clock className="w-10 h-10 text-primary" />
           </div>
           <h1 className="text-3xl font-bold mb-4">Ready to lift?</h1>
-          <p className="text-gray-400 mb-8 max-w-sm">Start your session now. Track your reps, beat your records.</p>
+          <p className="text-muted-foreground mb-8 max-w-sm">Start your session now. Track your reps, beat your records.</p>
           <button 
             onClick={handleStartWorkout}
             disabled={isStarting}
-            className="w-full max-w-xs py-4 bg-primary text-white rounded-2xl font-bold text-lg hover:bg-primary/90 transition shadow-lg shadow-primary/20 disabled:opacity-70 flex items-center justify-center"
+            className="w-full max-w-xs py-4 bg-primary text-primary-foreground rounded-2xl font-bold text-lg hover:bg-primary/90 transition shadow-lg shadow-primary/20 disabled:opacity-70 flex items-center justify-center"
           >
             {isStarting ? <Loader2 className="w-6 h-6 animate-spin" /> : "Start Workout"}
           </button>
@@ -172,7 +172,7 @@ export default function WorkoutPage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#05050a]">
+    <div className="relative min-h-screen overflow-hidden bg-background">
       {/* Dynamic Multi-Color Background */}
       <div 
         className="absolute inset-0 w-full h-full opacity-50 pointer-events-none z-0 fixed"
@@ -195,7 +195,7 @@ export default function WorkoutPage() {
           <button 
             onClick={handleFinishWorkout}
             disabled={isFinishing}
-            className="text-sm font-semibold bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition flex items-center gap-2 disabled:opacity-50"
+            className="text-sm font-semibold bg-muted hover:bg-secondary px-4 py-2 rounded-full transition flex items-center gap-2 disabled:opacity-50"
           >
             {isFinishing && <Loader2 className="w-4 h-4 animate-spin" />}
             Finish
@@ -209,15 +209,15 @@ export default function WorkoutPage() {
               className="glass-card rounded-2xl overflow-hidden animate-fade-in-up"
               style={{ animationDelay: `${exIndex * 100}ms` }}
             >
-              <div className="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
+              <div className="p-4 border-b border-border bg-muted flex items-center justify-between">
                 <div>
-                  <h2 className="font-bold text-lg text-white">{activeEx.name}</h2>
+                  <h2 className="font-bold text-lg text-foreground">{activeEx.name}</h2>
                   <span className="text-xs text-primary">{activeEx.bodyPart}</span>
                 </div>
                 <button 
                   onClick={() => handleDeleteExercise(activeEx.id)}
                   disabled={deletingExerciseId === activeEx.id}
-                  className="w-8 h-8 flex items-center justify-center text-red-500 hover:bg-red-500/20 bg-red-500/10 rounded-xl transition disabled:opacity-50"
+                  className="w-8 h-8 flex items-center justify-center text-destructive hover:bg-destructive/20 bg-destructive/10 rounded-xl transition disabled:opacity-50"
                   title="Remove Exercise"
                 >
                   {deletingExerciseId === activeEx.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
@@ -227,14 +227,14 @@ export default function WorkoutPage() {
               <div className="p-4 space-y-4">
                 {/* Previous History Inline */}
                 {activeEx.previousSets && activeEx.previousSets.length > 0 && (
-                  <div className="bg-white/5 rounded-xl p-3 mb-4 border border-white/5">
-                    <div className="flex items-center text-xs text-gray-400 font-medium mb-2">
+                  <div className="bg-muted rounded-xl p-3 mb-4 border border-border">
+                    <div className="flex items-center text-xs text-muted-foreground font-medium mb-2">
                       <History className="w-3 h-3 mr-1.5" />
                       PREVIOUS SESSION
                     </div>
                     <div className="space-y-1">
                       {activeEx.previousSets.map((prevSet: any, i: number) => (
-                        <div key={i} className="flex justify-between text-sm text-gray-300">
+                        <div key={i} className="flex justify-between text-sm text-muted-foreground">
                           <span>Set {prevSet.setNumber}</span>
                           <span>{prevSet.weight} kg × {prevSet.reps} reps</span>
                         </div>
@@ -278,24 +278,24 @@ export default function WorkoutPage() {
           ))}
 
           {/* Inline Exercise Library */}
-          <div className="mt-10 mb-6 bg-black/20 p-6 rounded-3xl border border-white/5">
-            <h2 className="text-xl font-bold text-white mb-4">Add from Library</h2>
+          <div className="mt-10 mb-6 bg-secondary p-6 rounded-3xl border border-border">
+            <h2 className="text-xl font-bold text-foreground mb-4">Add from Library</h2>
             
             <div className="relative mb-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
               <input 
                 type="text" 
                 placeholder="Search exercises..." 
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="w-full bg-input rounded-xl pl-10 pr-4 py-3 text-white border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+                className="w-full bg-input rounded-xl pl-10 pr-4 py-3 text-foreground border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
               />
             </div>
 
             <div className="flex space-x-2 overflow-x-auto pb-2 mb-4 scrollbar-hide">
               <button 
                 onClick={() => setSelectedTag(null)}
-                className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-medium transition ${!selectedTag ? 'bg-primary text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}
+                className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-medium transition ${!selectedTag ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
               >
                 All
               </button>
@@ -303,7 +303,7 @@ export default function WorkoutPage() {
                 <button 
                   key={part}
                   onClick={() => setSelectedTag(part)}
-                  className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-medium transition ${selectedTag === part ? 'bg-primary text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}
+                  className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-medium transition ${selectedTag === part ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
                 >
                   {part}
                 </button>
@@ -316,11 +316,11 @@ export default function WorkoutPage() {
                   key={ex.id}
                   onClick={() => handleAddExercise(ex)}
                   disabled={addingExerciseId === ex.id}
-                  className="w-full text-left p-4 rounded-xl glass border border-white/5 hover:border-primary/30 transition flex items-center justify-between group disabled:opacity-50"
+                  className="w-full text-left p-4 rounded-xl glass border-border hover:border-primary/30 transition flex items-center justify-between group disabled:opacity-50"
                 >
                   <div>
-                    <div className="font-medium text-white">{ex.name}</div>
-                    <div className="text-xs text-gray-400 mt-1">{ex.bodyPart}</div>
+                    <div className="font-medium text-foreground">{ex.name}</div>
+                    <div className="text-xs text-muted-foreground mt-1">{ex.bodyPart}</div>
                   </div>
                   {addingExerciseId === ex.id ? (
                     <Loader2 className="w-5 h-5 text-primary animate-spin" />
@@ -331,7 +331,7 @@ export default function WorkoutPage() {
               ))}
               
               {search && filteredExercises.length === 0 && (
-                <div className="text-center py-8 text-gray-400 glass rounded-2xl border border-white/5">
+                <div className="text-center py-8 text-muted-foreground glass rounded-2xl border-border">
                   <p className="mb-4">Exercise not found.</p>
                   <button 
                     onClick={() => {
@@ -339,7 +339,7 @@ export default function WorkoutPage() {
                       setNewExerciseBodyPart(selectedTag || BODY_PARTS[0]);
                       setIsCreatingExercise(true);
                     }}
-                    className="px-6 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition shadow-lg shadow-primary/20 inline-flex items-center"
+                    className="px-6 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition shadow-lg shadow-primary/20 inline-flex items-center"
                   >
                     <Plus className="w-5 h-5 mr-2" />
                     Create New Exercise
@@ -358,23 +358,23 @@ export default function WorkoutPage() {
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Exercise Name</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-1">Exercise Name</label>
                   <input 
                     type="text" 
                     value={newExerciseName}
                     onChange={e => setNewExerciseName(e.target.value)}
-                    className="w-full bg-input rounded-xl px-4 py-3 text-white border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                    className="w-full bg-input rounded-xl px-4 py-3 text-foreground border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                     placeholder="e.g. Bench Press"
                     autoFocus
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Body Part</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-1">Body Part</label>
                   <select 
                     value={newExerciseBodyPart}
                     onChange={e => setNewExerciseBodyPart(e.target.value)}
-                    className="w-full bg-input rounded-xl px-4 py-3 text-white border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none"
+                    className="w-full bg-input rounded-xl px-4 py-3 text-foreground border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none"
                   >
                     {BODY_PARTS.map(part => (
                       <option key={part} value={part}>{part}</option>
@@ -385,13 +385,13 @@ export default function WorkoutPage() {
                 <div className="flex space-x-3 pt-4">
                   <button 
                     onClick={() => setIsCreatingExercise(false)}
-                    className="flex-1 py-3 rounded-xl font-medium text-gray-300 hover:bg-white/5 transition"
+                    className="flex-1 py-3 rounded-xl font-medium text-muted-foreground hover:bg-muted transition"
                   >
                     Cancel
                   </button>
                   <button 
                     onClick={handleCreateNewExercise}
-                    className="flex-1 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition shadow-lg shadow-primary/20"
+                    className="flex-1 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition shadow-lg shadow-primary/20"
                   >
                     Save & Add
                   </button>
@@ -425,7 +425,7 @@ function AddSetForm({ workoutId, exerciseId, setNumber, onAdd }: { workoutId: st
 
   return (
     <div className="flex items-center gap-3">
-      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm font-medium text-white">
+      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm font-medium text-foreground">
         {setNumber}
       </div>
       <div className="flex-1 relative">
@@ -434,7 +434,7 @@ function AddSetForm({ workoutId, exerciseId, setNumber, onAdd }: { workoutId: st
           value={weight}
           onChange={e => setWeight(e.target.value)}
           placeholder="kg"
-          className="w-full bg-input border border-white/10 rounded-xl px-4 py-2 text-center text-white focus:border-primary outline-none"
+          className="w-full bg-input border border-border rounded-xl px-4 py-2 text-center text-foreground focus:border-primary outline-none"
         />
       </div>
       <div className="flex-1 relative">
@@ -443,12 +443,12 @@ function AddSetForm({ workoutId, exerciseId, setNumber, onAdd }: { workoutId: st
           value={reps}
           onChange={e => setReps(e.target.value)}
           placeholder="reps"
-          className="w-full bg-input border border-white/10 rounded-xl px-4 py-2 text-center text-white focus:border-primary outline-none"
+          className="w-full bg-input border border-border rounded-xl px-4 py-2 text-center text-foreground focus:border-primary outline-none"
         />
       </div>
       <button 
         onClick={() => setIsDropSet(!isDropSet)}
-        className={`w-8 h-8 flex items-center justify-center rounded-xl font-bold text-xs transition border border-white/5 ${isDropSet ? 'bg-orange-500 text-white shadow-[0_0_10px_rgba(249,115,22,0.5)]' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
+        className={`w-8 h-8 flex items-center justify-center rounded-xl font-bold text-xs transition border border-border ${isDropSet ? 'bg-orange-500 text-white shadow-[0_0_10px_rgba(249,115,22,0.5)]' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
         title="Mark as Drop Set"
       >
         D
@@ -456,7 +456,7 @@ function AddSetForm({ workoutId, exerciseId, setNumber, onAdd }: { workoutId: st
       <button 
         onClick={handleAdd}
         disabled={!weight || !reps || isLoading}
-        className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center disabled:opacity-50 transition"
+        className="w-8 h-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center disabled:opacity-50 transition"
       >
         {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-5 h-5" />}
       </button>
@@ -490,7 +490,7 @@ function WorkoutSetRow({ set, index, onSave, onDelete }: { set: any, index: numb
   if (isEditing) {
     return (
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-medium text-gray-400 shrink-0">
+        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm font-medium text-muted-foreground shrink-0">
           {set.isDropSet ? <span className="text-orange-500 font-bold text-xs">D</span> : (index + 1)}
         </div>
         <div className="flex-1 relative">
@@ -498,7 +498,7 @@ function WorkoutSetRow({ set, index, onSave, onDelete }: { set: any, index: numb
             type="number" 
             value={weight}
             onChange={e => setWeight(e.target.value)}
-            className="w-full bg-input border border-primary/50 rounded-xl px-4 py-2 text-center text-white focus:border-primary outline-none"
+            className="w-full bg-input border border-primary/50 rounded-xl px-4 py-2 text-center text-foreground focus:border-primary outline-none"
             placeholder="kg"
             autoFocus
           />
@@ -508,7 +508,7 @@ function WorkoutSetRow({ set, index, onSave, onDelete }: { set: any, index: numb
             type="number" 
             value={reps}
             onChange={e => setReps(e.target.value)}
-            className="w-full bg-input border border-primary/50 rounded-xl px-4 py-2 text-center text-white focus:border-primary outline-none"
+            className="w-full bg-input border border-primary/50 rounded-xl px-4 py-2 text-center text-foreground focus:border-primary outline-none"
             placeholder="reps"
           />
         </div>
@@ -538,26 +538,26 @@ function WorkoutSetRow({ set, index, onSave, onDelete }: { set: any, index: numb
 
   return (
     <div className="flex items-center gap-3 group">
-      <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-medium text-gray-400 shrink-0">
+      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm font-medium text-muted-foreground shrink-0">
         {set.isDropSet ? <span className="text-orange-500 font-bold text-xs">D</span> : (index + 1)}
       </div>
-      <div className="flex-1 bg-white/5 rounded-xl px-4 py-2 text-center text-white transition group-hover:bg-white/10">
+      <div className="flex-1 bg-muted rounded-xl px-4 py-2 text-center text-foreground transition group-hover:bg-secondary">
         {set.weight} kg
       </div>
-      <div className="flex-1 bg-white/5 rounded-xl px-4 py-2 text-center text-white transition group-hover:bg-white/10">
+      <div className="flex-1 bg-muted rounded-xl px-4 py-2 text-center text-foreground transition group-hover:bg-secondary">
         {set.reps} reps
       </div>
       <div className="flex items-center gap-2 shrink-0 opacity-50 group-hover:opacity-100 transition">
         <button 
           onClick={() => setIsEditing(true)}
-          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white bg-white/5 rounded-xl transition"
+          className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground bg-muted rounded-xl transition"
         >
           <Edit2 className="w-4 h-4" />
         </button>
         <button 
           onClick={handleDelete}
           disabled={isDeleting}
-          className="w-8 h-8 flex items-center justify-center text-red-400 hover:text-white bg-red-500/10 hover:bg-red-500/30 rounded-xl transition disabled:opacity-50"
+          className="w-8 h-8 flex items-center justify-center text-destructive hover:text-white bg-destructive/10 hover:bg-destructive/30 rounded-xl transition disabled:opacity-50"
         >
           {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
         </button>

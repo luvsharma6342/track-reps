@@ -70,7 +70,7 @@ export default function TodaysSessionPage() {
   const activeExercises = Array.from(exerciseMap.values());
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#05050a]">
+    <div className="relative min-h-screen overflow-hidden bg-background">
       {/* Toast Notification */}
       {toastMsg && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-emerald-500 text-white px-6 py-3 rounded-2xl shadow-xl shadow-emerald-500/20 font-medium flex items-center gap-2 animate-fade-in-up">
@@ -82,14 +82,14 @@ export default function TodaysSessionPage() {
       {/* Delete Confirmation Modal */}
       {deleteConf && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-[#0f0f16] border border-white/10 p-6 rounded-3xl max-w-sm w-full shadow-2xl">
+          <div className="bg-muted border border-border p-6 rounded-3xl max-w-sm w-full shadow-2xl">
             <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
               <AlertTriangle className="w-6 h-6 text-red-500" />
             </div>
-            <h2 className="text-xl font-bold text-white mb-2">
+            <h2 className="text-xl font-bold text-foreground mb-2">
               Delete {deleteConf.type === 'exercise' ? 'Exercise' : 'Set'}?
             </h2>
-            <p className="text-gray-400 mb-6">
+            <p className="text-muted-foreground mb-6">
               {deleteConf.type === 'exercise' 
                 ? "Are you sure you want to delete this exercise and all its sets from today's session? This cannot be undone."
                 : "Are you sure you want to delete this set? This cannot be undone."}
@@ -98,14 +98,14 @@ export default function TodaysSessionPage() {
               <button 
                 onClick={() => setDeleteConf(null)}
                 disabled={isDeleting}
-                className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-semibold transition disabled:opacity-50"
+                className="flex-1 px-4 py-3 bg-background hover:bg-secondary text-foreground rounded-xl font-semibold transition disabled:opacity-50"
               >
                 Cancel
               </button>
               <button 
                 onClick={confirmDelete}
                 disabled={isDeleting}
-                className="flex-1 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold transition shadow-lg shadow-red-500/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                className="flex-1 px-4 py-3 bg-destructive hover:bg-destructive/90 text-destructive-foreground rounded-xl font-semibold transition shadow-lg shadow-destructive/20 flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {isDeleting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Delete"}
               </button>
@@ -129,7 +129,7 @@ export default function TodaysSessionPage() {
 
       <div className="relative z-10 min-h-screen p-6 max-w-2xl mx-auto pb-24">
         <div className="flex items-center mb-8">
-          <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition mr-4">
+          <Link href="/" className="p-2 rounded-full hover:bg-muted transition mr-4">
             <ArrowLeft className="w-6 h-6" />
           </Link>
           <h1 className="text-2xl font-bold flex items-center">
@@ -143,14 +143,14 @@ export default function TodaysSessionPage() {
             <div className="w-8 h-8 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
           </div>
         ) : activeExercises.length === 0 ? (
-          <div className="text-center py-20 bg-white/5 rounded-3xl border border-white/10 glass-card">
-            <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Dumbbell className="w-10 h-10 text-gray-500" />
+          <div className="text-center py-20 bg-muted rounded-3xl border border-border glass-card">
+            <div className="w-20 h-20 bg-background rounded-full flex items-center justify-center mx-auto mb-6">
+              <Dumbbell className="w-10 h-10 text-muted-foreground" />
             </div>
             <h2 className="text-2xl font-bold mb-4">No workouts logged today yet</h2>
-            <p className="text-gray-400 mb-8">Start a workout to see your progress here.</p>
+            <p className="text-muted-foreground mb-8">Start a workout to see your progress here.</p>
             <Link href="/workouts">
-              <button className="px-8 py-4 bg-primary text-white rounded-2xl font-bold hover:bg-primary/90 transition shadow-lg shadow-primary/20">
+              <button className="px-8 py-4 bg-primary text-primary-foreground rounded-2xl font-bold hover:bg-primary/90 transition shadow-lg shadow-primary/20">
                 Start a Workout
               </button>
             </Link>
@@ -163,9 +163,9 @@ export default function TodaysSessionPage() {
                 className="glass-card rounded-2xl overflow-hidden animate-fade-in-up"
                 style={{ animationDelay: `${exIndex * 100}ms` }}
               >
-                <div className="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
+                <div className="p-4 border-b border-border bg-muted flex items-center justify-between">
                   <div>
-                    <h2 className="font-bold text-lg text-white">{activeEx.exercise.name}</h2>
+                    <h2 className="font-bold text-lg text-foreground">{activeEx.exercise.name}</h2>
                     <span className="text-xs text-primary">{activeEx.exercise.bodyPart}</span>
                   </div>
                   <div className="flex items-center gap-3">
@@ -219,7 +219,7 @@ function SetRow({ set, index, onSave, onDelete }: { set: any, index: number, onS
   if (isEditing) {
     return (
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-medium text-gray-400 shrink-0">
+        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm font-medium text-muted-foreground shrink-0">
           {set.isDropSet ? <span className="text-orange-500 font-bold text-xs">D</span> : (index + 1)}
         </div>
         <div className="flex-1 relative">
@@ -227,7 +227,7 @@ function SetRow({ set, index, onSave, onDelete }: { set: any, index: number, onS
             type="number" 
             value={weight}
             onChange={e => setWeight(e.target.value)}
-            className="w-full bg-input border border-primary/50 rounded-xl px-4 py-2 text-center text-white focus:border-primary outline-none"
+            className="w-full bg-input border border-primary/50 rounded-xl px-4 py-2 text-center text-foreground focus:border-primary outline-none"
             placeholder="kg"
             autoFocus
           />
@@ -237,7 +237,7 @@ function SetRow({ set, index, onSave, onDelete }: { set: any, index: number, onS
             type="number" 
             value={reps}
             onChange={e => setReps(e.target.value)}
-            className="w-full bg-input border border-primary/50 rounded-xl px-4 py-2 text-center text-white focus:border-primary outline-none"
+            className="w-full bg-input border border-primary/50 rounded-xl px-4 py-2 text-center text-foreground focus:border-primary outline-none"
             placeholder="reps"
           />
         </div>
@@ -267,25 +267,25 @@ function SetRow({ set, index, onSave, onDelete }: { set: any, index: number, onS
 
   return (
     <div className="flex items-center gap-3 group">
-      <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-medium text-gray-400 shrink-0">
+      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm font-medium text-muted-foreground shrink-0">
         {set.isDropSet ? <span className="text-orange-500 font-bold text-xs">D</span> : (index + 1)}
       </div>
-      <div className="flex-1 bg-white/5 rounded-xl px-4 py-2 text-center text-white transition group-hover:bg-white/10">
+      <div className="flex-1 bg-muted rounded-xl px-4 py-2 text-center text-foreground transition group-hover:bg-secondary">
         {set.weight} kg
       </div>
-      <div className="flex-1 bg-white/5 rounded-xl px-4 py-2 text-center text-white transition group-hover:bg-white/10">
+      <div className="flex-1 bg-muted rounded-xl px-4 py-2 text-center text-foreground transition group-hover:bg-secondary">
         {set.reps} reps
       </div>
       <div className="flex items-center gap-2 shrink-0 opacity-50 group-hover:opacity-100 transition">
         <button 
           onClick={() => setIsEditing(true)}
-          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white bg-white/5 rounded-xl transition"
+          className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground bg-muted rounded-xl transition"
         >
           <Edit2 className="w-4 h-4" />
         </button>
         <button 
           onClick={onDelete}
-          className="w-8 h-8 flex items-center justify-center text-red-400 hover:text-white bg-red-500/10 hover:bg-red-500/30 rounded-xl transition"
+          className="w-8 h-8 flex items-center justify-center text-destructive hover:text-destructive-foreground bg-destructive/10 hover:bg-destructive/30 rounded-xl transition"
         >
           <Trash2 className="w-4 h-4" />
         </button>

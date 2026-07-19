@@ -78,7 +78,7 @@ export default function MetricsPage() {
     }));
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#05050a] text-white">
+    <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
       {toastMsg && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-teal-500 text-white px-6 py-3 rounded-2xl shadow-xl shadow-teal-500/20 font-medium flex items-center gap-2 animate-fade-in-up">
           <Check className="w-5 h-5" />
@@ -99,7 +99,7 @@ export default function MetricsPage() {
 
       <div className="relative z-10 p-6 max-w-4xl mx-auto pb-24">
         <div className="flex items-center mb-8">
-          <Link href="/" className="p-2 rounded-full hover:bg-white/10 transition mr-4">
+          <Link href="/" className="p-2 rounded-full hover:bg-muted transition mr-4">
             <ArrowLeft className="w-6 h-6" />
           </Link>
           <h1 className="text-2xl font-bold flex items-center">
@@ -116,34 +116,34 @@ export default function MetricsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left Column: Form */}
             <div className="space-y-6">
-              <form onSubmit={handleSave} className="glass-card p-6 rounded-3xl border border-white/10">
+              <form onSubmit={handleSave} className="glass-card p-6 rounded-3xl border border-border">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-bold">Log Metrics</h2>
                   <input 
                     type="date"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:border-teal-400 outline-none text-white"
+                    className="bg-input border border-border rounded-xl px-3 py-2 text-sm focus:border-teal-400 outline-none text-foreground"
                   />
                 </div>
 
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm text-gray-400 mb-1 flex items-center gap-1"><Scale className="w-4 h-4"/> Weight (kg)</label>
+                      <label className="block text-sm text-muted-foreground mb-1 flex items-center gap-1"><Scale className="w-4 h-4"/> Weight (kg)</label>
                       <input 
                         type="number" step="0.1" 
                         value={weight} onChange={e => setWeight(e.target.value)}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-teal-400 outline-none transition"
+                        className="w-full bg-input border border-border rounded-xl px-4 py-3 focus:border-teal-400 outline-none transition"
                         placeholder="e.g. 75.5"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-gray-400 mb-1 flex items-center gap-1"><Activity className="w-4 h-4"/> Body Fat (%)</label>
+                      <label className="block text-sm text-muted-foreground mb-1 flex items-center gap-1"><Activity className="w-4 h-4"/> Body Fat (%)</label>
                       <input 
                         type="number" step="0.1"
                         value={bodyFat} onChange={e => setBodyFat(e.target.value)}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-teal-400 outline-none transition"
+                        className="w-full bg-input border border-border rounded-xl px-4 py-3 focus:border-teal-400 outline-none transition"
                         placeholder="e.g. 15.2"
                       />
                     </div>
@@ -163,7 +163,7 @@ export default function MetricsPage() {
 
             {/* Right Column: Chart and History */}
             <div className="space-y-6">
-              <div className="glass-card p-6 rounded-3xl border border-white/10">
+              <div className="glass-card p-6 rounded-3xl border border-border">
                 <h2 className="text-xl font-bold mb-6">Weight Progression</h2>
                 {chartData.length > 0 ? (
                   <div className="h-64 w-full">
@@ -200,22 +200,22 @@ export default function MetricsPage() {
                     </ResponsiveContainer>
                   </div>
                 ) : (
-                  <div className="h-64 flex items-center justify-center text-gray-500 text-sm">
+                  <div className="h-64 flex items-center justify-center text-muted-foreground text-sm">
                     Log your weight to see progression
                   </div>
                 )}
               </div>
 
-              <div className="glass-card p-6 rounded-3xl border border-white/10">
+              <div className="glass-card p-6 rounded-3xl border border-border">
                 <h2 className="text-xl font-bold mb-4">History</h2>
                 <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                   {[...metrics].reverse().map(m => (
-                    <div key={m.id} className="bg-white/5 border border-white/5 p-4 rounded-2xl flex items-center justify-between hover:bg-white/10 transition">
+                    <div key={m.id} className="bg-muted border border-border p-4 rounded-2xl flex items-center justify-between hover:bg-secondary transition">
                       <div>
                         <div className="text-sm font-bold text-teal-400">
                           {new Date(m.date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
                         </div>
-                        <div className="text-xs text-gray-400 flex gap-3 mt-1">
+                        <div className="text-xs text-muted-foreground flex gap-3 mt-1">
                           {m.weight && <span>{m.weight} kg</span>}
                           {m.bodyFatPercent && <span>{m.bodyFatPercent}% BF</span>}
                         </div>
@@ -226,14 +226,14 @@ export default function MetricsPage() {
                             setDate(new Date(m.date).toISOString().split('T')[0]);
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                           }}
-                          className="p-2 bg-white/5 hover:bg-teal-500/20 hover:text-teal-400 rounded-lg transition-all"
+                          className="p-2 bg-background hover:bg-secondary hover:text-teal-400 rounded-lg transition-all"
                           title="Edit"
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button 
                           onClick={() => setMetricToDelete(m.id)}
-                          className="p-2 bg-white/5 hover:bg-red-500/20 hover:text-red-400 rounded-lg transition-all"
+                          className="p-2 bg-background hover:bg-secondary hover:text-red-400 rounded-lg transition-all"
                           title="Delete"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -242,7 +242,7 @@ export default function MetricsPage() {
                     </div>
                   ))}
                   {metrics.length === 0 && (
-                    <div className="text-center text-gray-500 text-sm py-4">No metrics logged yet.</div>
+                    <div className="text-center text-muted-foreground text-sm py-4">No metrics logged yet.</div>
                   )}
                 </div>
               </div>
@@ -254,19 +254,19 @@ export default function MetricsPage() {
       {/* Delete Confirmation Modal */}
       {metricToDelete && (
         <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4">
-           <div className="bg-[#0f0f16] border border-white/10 rounded-3xl p-6 max-w-sm w-full animate-scale-in">
+           <div className="bg-muted border border-border rounded-3xl p-6 max-w-sm w-full animate-scale-in">
              <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mb-4 text-red-400">
                <Trash2 className="w-6 h-6" />
              </div>
-             <h3 className="text-xl font-bold mb-2 text-white">Delete Entry?</h3>
-             <p className="text-gray-400 mb-6 text-sm">
+             <h3 className="text-xl font-bold mb-2 text-foreground">Delete Entry?</h3>
+             <p className="text-muted-foreground mb-6 text-sm">
                Are you sure you want to permanently delete this body metric entry? This action cannot be undone.
              </p>
              <div className="flex gap-3">
                <button 
                  onClick={() => setMetricToDelete(null)}
                  disabled={isDeleting}
-                 className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-medium transition disabled:opacity-50"
+                 className="flex-1 px-4 py-3 bg-background hover:bg-secondary text-foreground rounded-xl font-medium transition disabled:opacity-50"
                >
                  Cancel
                </button>
