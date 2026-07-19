@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { getTodaysWorkouts, updateSet, deleteSet, deleteTodaysExerciseSets } from "@/app/actions";
-import Link from "next/link";
 import { ArrowLeft, Calendar, Dumbbell, Check, Edit2, X, Trash2, AlertTriangle, Loader2 } from "lucide-react";
+import { ThemeToggle } from "@/app/components/theme-toggle";
 
 export default function TodaysSessionPage() {
   const [workouts, setWorkouts] = useState<any[]>([]);
@@ -127,15 +127,18 @@ export default function TodaysSessionPage() {
         }}
       />
 
-      <div className="relative z-10 min-h-screen p-6 pt-20 max-w-2xl mx-auto pb-24">
-        <div className="flex items-center mb-8">
-          <Link href="/" className="p-2 rounded-full hover:bg-muted transition mr-4">
-            <ArrowLeft className="w-6 h-6" />
-          </Link>
-          <h1 className="text-2xl font-bold flex items-center">
-            <Calendar className="w-6 h-6 mr-3 text-emerald-400" />
-            Today's Session
-          </h1>
+      <div className="relative z-10 min-h-screen p-6 max-w-2xl mx-auto pb-24">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center">
+            <Link href="/" className="p-2 rounded-full hover:bg-muted transition mr-4">
+              <ArrowLeft className="w-6 h-6" />
+            </Link>
+            <h1 className="text-2xl font-bold flex items-center">
+              <Calendar className="w-6 h-6 text-primary mr-3" />
+              Today's Session
+            </h1>
+          </div>
+          <ThemeToggle />
         </div>
 
         {isLoading ? (

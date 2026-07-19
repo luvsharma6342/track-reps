@@ -5,6 +5,7 @@ import { Plus, Check, ArrowLeft, Search, Clock, History, Loader2, Trash2, Edit2,
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { startWorkout, getExercises, addSetToWorkout, getPreviousSession, createExercise, removeExerciseFromWorkout, updateSet, deleteSet, getActiveWorkout, finishWorkout, addExerciseToWorkout } from "@/app/actions";
+import { ThemeToggle } from "@/app/components/theme-toggle";
 
 const BODY_PARTS = ["Chest", "Back", "Legs", "Arms", "Shoulders", "Core", "Cardio", "Biceps", "Triceps"];
 
@@ -151,6 +152,9 @@ export default function WorkoutPage() {
         <Link href="/" className="absolute top-6 left-6 p-2 rounded-full hover:bg-muted transition z-10">
           <ArrowLeft className="w-6 h-6" />
         </Link>
+        <div className="absolute top-6 right-6 z-10">
+          <ThemeToggle />
+        </div>
         <div
           className="relative z-10 animate-scale-in"
         >
@@ -186,20 +190,23 @@ export default function WorkoutPage() {
         }}
       />
 
-      <div className="relative z-10 min-h-screen p-6 pt-20 max-w-2xl mx-auto pb-24">
+      <div className="relative z-10 min-h-screen p-6 max-w-2xl mx-auto pb-24">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-bold flex items-center">
             <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse mr-3"></div>
             Active Workout
           </h1>
-          <button 
-            onClick={handleFinishWorkout}
-            disabled={isFinishing}
-            className="text-sm font-semibold bg-muted hover:bg-secondary px-4 py-2 rounded-full transition flex items-center gap-2 disabled:opacity-50"
-          >
-            {isFinishing && <Loader2 className="w-4 h-4 animate-spin" />}
-            Finish
-          </button>
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={handleFinishWorkout}
+              disabled={isFinishing}
+              className="text-sm font-semibold bg-muted hover:bg-secondary px-4 py-2 rounded-full transition flex items-center gap-2 disabled:opacity-50"
+            >
+              {isFinishing && <Loader2 className="w-4 h-4 animate-spin" />}
+              Finish
+            </button>
+            <ThemeToggle />
+          </div>
         </div>
 
         <div className="space-y-6">
