@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { getTodaysWorkouts, updateSet, deleteSet, deleteTodaysExerciseSets } from "@/app/actions";
-import { ArrowLeft, Calendar, Dumbbell, Check, Edit2, X, Trash2, AlertTriangle, Loader2 } from "lucide-react";
+import { ArrowLeft, Calendar, Dumbbell, Check, Edit2, X, Trash2, AlertTriangle, Loader2, Link } from "lucide-react";
 import { ThemeToggle } from "@/app/components/theme-toggle";
 
 export default function TodaysSessionPage() {
   const [workouts, setWorkouts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // Custom states for Delete Modal and Toasts
   const [deleteConf, setDeleteConf] = useState<{ type: 'exercise' | 'set', id: string } | null>(null);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
@@ -38,7 +38,7 @@ export default function TodaysSessionPage() {
   const confirmDelete = async () => {
     if (!deleteConf) return;
     setIsDeleting(true);
-    
+
     if (deleteConf.type === 'exercise') {
       await deleteTodaysExerciseSets(deleteConf.id);
       showToast("Exercise deleted");
@@ -90,19 +90,19 @@ export default function TodaysSessionPage() {
               Delete {deleteConf.type === 'exercise' ? 'Exercise' : 'Set'}?
             </h2>
             <p className="text-muted-foreground mb-6">
-              {deleteConf.type === 'exercise' 
+              {deleteConf.type === 'exercise'
                 ? "Are you sure you want to delete this exercise and all its sets from today's session? This cannot be undone."
                 : "Are you sure you want to delete this set? This cannot be undone."}
             </p>
             <div className="flex gap-3">
-              <button 
+              <button
                 onClick={() => setDeleteConf(null)}
                 disabled={isDeleting}
                 className="flex-1 px-4 py-3 bg-background hover:bg-secondary text-foreground rounded-xl font-semibold transition disabled:opacity-50"
               >
                 Cancel
               </button>
-              <button 
+              <button
                 onClick={confirmDelete}
                 disabled={isDeleting}
                 className="flex-1 px-4 py-3 bg-destructive hover:bg-destructive/90 text-destructive-foreground rounded-xl font-semibold transition shadow-lg shadow-destructive/20 flex items-center justify-center gap-2 disabled:opacity-50"
@@ -115,7 +115,7 @@ export default function TodaysSessionPage() {
       )}
 
       {/* Dynamic Multi-Color Background */}
-      <div 
+      <div
         className="absolute inset-0 w-full h-full opacity-50 pointer-events-none z-0 fixed"
         style={{
           backgroundImage: `
@@ -161,7 +161,7 @@ export default function TodaysSessionPage() {
         ) : (
           <div className="space-y-6">
             {activeExercises.map((activeEx, exIndex) => (
-              <div 
+              <div
                 key={activeEx.exercise.id}
                 className="glass-card rounded-2xl overflow-hidden animate-fade-in-up"
                 style={{ animationDelay: `${exIndex * 100}ms` }}
@@ -175,7 +175,7 @@ export default function TodaysSessionPage() {
                     <div className="text-sm font-medium text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full">
                       {activeEx.sets.length} Sets Completed
                     </div>
-                    <button 
+                    <button
                       onClick={() => setDeleteConf({ type: 'exercise', id: activeEx.exercise.id })}
                       className="w-8 h-8 flex items-center justify-center text-red-500 hover:bg-red-500/20 bg-red-500/10 rounded-xl transition"
                     >
@@ -183,15 +183,15 @@ export default function TodaysSessionPage() {
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="p-4 space-y-4">
                   {/* Current Sets */}
                   {activeEx.sets.map((set: any, i: number) => (
-                    <SetRow 
-                      key={set.id} 
-                      set={set} 
-                      index={i} 
-                      onSave={fetchWorkouts} 
+                    <SetRow
+                      key={set.id}
+                      set={set}
+                      index={i}
+                      onSave={fetchWorkouts}
                       onDelete={() => setDeleteConf({ type: 'set', id: set.id })}
                     />
                   ))}
@@ -226,8 +226,8 @@ function SetRow({ set, index, onSave, onDelete }: { set: any, index: number, onS
           {set.isDropSet ? <span className="text-orange-500 font-bold text-xs">D</span> : (index + 1)}
         </div>
         <div className="flex-1 relative">
-          <input 
-            type="number" 
+          <input
+            type="number"
             value={weight}
             onChange={e => setWeight(e.target.value)}
             className="w-full bg-input border border-primary/50 rounded-xl px-4 py-2 text-center text-foreground focus:border-primary outline-none"
@@ -236,8 +236,8 @@ function SetRow({ set, index, onSave, onDelete }: { set: any, index: number, onS
           />
         </div>
         <div className="flex-1 relative">
-          <input 
-            type="number" 
+          <input
+            type="number"
             value={reps}
             onChange={e => setReps(e.target.value)}
             className="w-full bg-input border border-primary/50 rounded-xl px-4 py-2 text-center text-foreground focus:border-primary outline-none"
@@ -245,14 +245,14 @@ function SetRow({ set, index, onSave, onDelete }: { set: any, index: number, onS
           />
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <button 
+          <button
             onClick={handleSave}
             disabled={isSaving}
             className="w-8 h-8 flex items-center justify-center text-emerald-400 bg-emerald-400/10 rounded-xl hover:bg-emerald-400/20 transition disabled:opacity-50"
           >
             <Check className="w-4 h-4" />
           </button>
-          <button 
+          <button
             onClick={() => {
               setIsEditing(false);
               setWeight(set.weight.toString());
@@ -280,13 +280,13 @@ function SetRow({ set, index, onSave, onDelete }: { set: any, index: number, onS
         {set.reps} reps
       </div>
       <div className="flex items-center gap-2 shrink-0 opacity-50 group-hover:opacity-100 transition">
-        <button 
+        <button
           onClick={() => setIsEditing(true)}
           className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground bg-muted rounded-xl transition"
         >
           <Edit2 className="w-4 h-4" />
         </button>
-        <button 
+        <button
           onClick={onDelete}
           className="w-8 h-8 flex items-center justify-center text-destructive hover:text-destructive-foreground bg-destructive/10 hover:bg-destructive/30 rounded-xl transition"
         >
