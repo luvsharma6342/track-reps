@@ -23,10 +23,10 @@ export default function Dashboard() {
         className="absolute inset-0 w-full h-full opacity-70 pointer-events-none z-0 fixed"
         style={{
           backgroundImage: `
-            radial-gradient(circle at 15% 15%, rgba(79, 70, 229, 0.35) 0%, transparent 50%),
-            radial-gradient(circle at 85% 85%, rgba(217, 70, 239, 0.35) 0%, transparent 50%),
-            radial-gradient(circle at 85% 15%, rgba(6, 182, 212, 0.25) 0%, transparent 50%),
-            radial-gradient(circle at 15% 85%, rgba(245, 158, 11, 0.25) 0%, transparent 50%)
+            radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 85% 85%, rgba(14, 165, 233, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 85% 15%, rgba(99, 102, 241, 0.25) 0%, transparent 50%),
+            radial-gradient(circle at 15% 85%, rgba(6, 182, 212, 0.25) 0%, transparent 50%)
           `
         }}
       />
@@ -44,10 +44,10 @@ export default function Dashboard() {
 
           {/* Hero Section */}
           <div className="mb-8 mt-4 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-            <span className="inline-block py-1 px-3 rounded-full bg-gradient-to-r from-indigo-500/20 to-fuchsia-500/20 border border-fuchsia-500/30 text-fuchsia-300 text-sm font-bold tracking-widest mb-6 uppercase shadow-[0_0_15px_rgba(217,70,239,0.2)]">
+            <span className="inline-block py-1 px-3 rounded-full bg-gradient-to-r from-blue-500/20 to-sky-500/20 border border-sky-500/30 text-sky-300 text-sm font-bold tracking-widest mb-6 uppercase shadow-[0_0_15px_rgba(14,165,233,0.2)]">
               Redefine Your Limits
             </span>
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-fuchsia-400 drop-shadow-sm">
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-400 drop-shadow-sm">
               Track Every Rep.<br/>Break Every Record.
             </h1>
             <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
@@ -60,16 +60,16 @@ export default function Dashboard() {
             <Link href="/workouts" className="w-full sm:w-auto">
               {hasActiveWorkout ? (
                 <button 
-                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(249,115,22,0.5)] hover:shadow-[0_0_60px_rgba(249,115,22,0.7)] transition-all border border-white/10 hover:scale-105 active:scale-95 animate-pulse"
+                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(14,165,233,0.5)] hover:shadow-[0_0_60px_rgba(14,165,233,0.7)] transition-all border border-white/10 hover:scale-105 active:scale-95 animate-pulse"
                 >
                   <Play className="w-5 h-5 fill-current text-white" />
                   Resume Workout
                 </button>
               ) : (
                 <button 
-                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-indigo-500 to-fuchsia-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(139,92,246,0.5)] hover:shadow-[0_0_60px_rgba(139,92,246,0.7)] transition-all border border-white/10 hover:scale-105 active:scale-95"
+                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(37,99,235,0.5)] hover:shadow-[0_0_60px_rgba(37,99,235,0.7)] transition-all border border-white/10 hover:scale-105 active:scale-95"
                 >
-                  <Zap className="w-5 h-5 fill-current text-yellow-300" />
+                  <Zap className="w-5 h-5 fill-current text-sky-300" />
                   Start a Workout
                 </button>
               )}
@@ -106,31 +106,31 @@ export default function Dashboard() {
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left animate-fade-in-up" style={{ animationDelay: '300ms' }}>
             
-            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-indigo-500/50 hover:bg-indigo-950/20 transition-all duration-300 group shadow-lg hover:shadow-indigo-500/10">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-blue-600/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform border border-indigo-500/30">
-                <Activity className="w-7 h-7 text-indigo-400" />
+            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-blue-500/50 hover:bg-blue-950/20 transition-all duration-300 group shadow-lg hover:shadow-blue-500/10">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-sky-600/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform border border-blue-500/30">
+                <Activity className="w-7 h-7 text-blue-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-indigo-300 transition-colors">Build Routines</h3>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">Build Routines</h3>
               <p className="text-gray-400 text-sm leading-relaxed">
                 Add any exercise you can imagine. Tag them by body part, and quickly add them during your sessions.
               </p>
             </div>
 
-            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-fuchsia-500/50 hover:bg-fuchsia-950/20 transition-all duration-300 group shadow-lg hover:shadow-fuchsia-500/10">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-fuchsia-500/20 to-pink-600/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform border border-fuchsia-500/30">
-                <Flame className="w-7 h-7 text-fuchsia-400" />
+            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-sky-500/50 hover:bg-sky-950/20 transition-all duration-300 group shadow-lg hover:shadow-sky-500/10">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-500/20 to-cyan-600/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform border border-sky-500/30">
+                <Flame className="w-7 h-7 text-sky-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-fuchsia-300 transition-colors">Log Heavy Sets</h3>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-sky-300 transition-colors">Log Heavy Sets</h3>
               <p className="text-gray-400 text-sm leading-relaxed">
                 Effortlessly record your weights and reps mid-workout. Stay focused on the lift, not the app.
               </p>
             </div>
 
-            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-amber-500/50 hover:bg-amber-950/20 transition-all duration-300 group shadow-lg hover:shadow-amber-500/10">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-600/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform border border-amber-500/30">
-                <TrendingUp className="w-7 h-7 text-amber-400" />
+            <div className="glass-card p-6 rounded-3xl border border-white/5 hover:border-cyan-500/50 hover:bg-cyan-950/20 transition-all duration-300 group shadow-lg hover:shadow-cyan-500/10">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-teal-600/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform border border-cyan-500/30">
+                <TrendingUp className="w-7 h-7 text-cyan-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-amber-300 transition-colors">Track Progression</h3>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">Track Progression</h3>
               <p className="text-gray-400 text-sm leading-relaxed">
                 View your complete exercise history at a glance. See your past performance to beat it today.
               </p>
