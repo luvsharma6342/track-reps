@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, User, Dumbbell, ArrowRight } from "lucide-react";
 import { signIn, signUp } from "@/lib/auth-client";
-import { ThemeToggle } from "@/app/components/theme-toggle";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -58,9 +57,6 @@ export default function LoginPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="absolute top-6 right-6 z-50">
-        <ThemeToggle />
-      </div>
       {/* Background Orbs */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/20 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-red-500/10 blur-[120px] pointer-events-none" />

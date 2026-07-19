@@ -5,7 +5,6 @@ import { Dumbbell, Activity, TrendingUp, Flame, Zap, Calendar, Play, Scale } fro
 import { useSession } from "@/lib/auth-client";
 import { useState, useEffect } from "react";
 import { getActiveWorkout } from "@/app/actions";
-import { ThemeToggle } from "@/app/components/theme-toggle";
 
 export default function Dashboard() {
   const { data: session, isPending } = useSession();
@@ -32,9 +31,6 @@ export default function Dashboard() {
         }}
       />
 
-      <div className="absolute top-6 right-6 z-50">
-        <ThemeToggle />
-      </div>
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6 max-w-5xl mx-auto">
         <div className="w-full text-center">
           {/* Personalized Greeting */}

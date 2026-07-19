@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { Plus, Search, Dumbbell, ArrowLeft, History, X, Calendar, Trash2, Edit2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { createExercise, getExercises, getExerciseHistory, deleteExercise, renameExercise } from "@/app/actions";
-import { ThemeToggle } from "@/app/components/theme-toggle";
 
 const BODY_PARTS = ["Chest", "Back", "Legs", "Arms", "Shoulders", "Core", "Cardio", "Biceps", "Triceps"];
 
@@ -115,17 +114,14 @@ export default function ExercisesPage() {
       />
 
       <div className="relative z-10 min-h-screen p-6 max-w-2xl mx-auto pb-24">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center">
-            <Link href="/" className="mr-4 p-2 rounded-full hover:bg-muted transition">
-              <ArrowLeft className="w-6 h-6" />
-            </Link>
-            <h1 className="text-3xl font-bold flex items-center">
-              <Dumbbell className="w-8 h-8 mr-3 text-primary" />
-              Exercise Library
-            </h1>
-          </div>
-          <ThemeToggle />
+        <div className="flex items-center mb-8">
+          <Link href="/" className="mr-4 p-2 rounded-full hover:bg-muted transition">
+            <ArrowLeft className="w-6 h-6" />
+          </Link>
+          <h1 className="text-3xl font-bold flex items-center">
+            <Dumbbell className="w-8 h-8 mr-3 text-primary" />
+            Exercise Library
+          </h1>
         </div>
 
         <div className="mb-6 space-y-4">

@@ -5,7 +5,6 @@ import { getBodyMetrics, logBodyMetrics, deleteBodyMetrics } from "@/app/actions
 import Link from "next/link";
 import { ArrowLeft, Activity, Save, Check, Scale, Ruler, Trash2, Edit2, Loader2 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { ThemeToggle } from "@/app/components/theme-toggle";
 
 export default function MetricsPage() {
   const [metrics, setMetrics] = useState<any[]>([]);
@@ -99,17 +98,14 @@ export default function MetricsPage() {
       />
 
       <div className="relative z-10 p-6 max-w-4xl mx-auto pb-24">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center">
-            <Link href="/" className="p-2 rounded-full hover:bg-muted transition mr-4">
-              <ArrowLeft className="w-6 h-6" />
-            </Link>
-            <h1 className="text-2xl font-bold flex items-center">
-              <Activity className="w-6 h-6 mr-3 text-teal-400" />
-              Body Metrics
-            </h1>
-          </div>
-          <ThemeToggle />
+        <div className="flex items-center mb-8">
+          <Link href="/" className="p-2 rounded-full hover:bg-muted transition mr-4">
+            <ArrowLeft className="w-6 h-6" />
+          </Link>
+          <h1 className="text-2xl font-bold flex items-center">
+            <Activity className="w-6 h-6 mr-3 text-teal-400" />
+            Body Metrics
+          </h1>
         </div>
 
         {isLoading ? (
