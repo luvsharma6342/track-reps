@@ -97,7 +97,7 @@ export default function MetricsPage() {
         }}
       />
 
-      <div className="relative z-10 p-6 max-w-4xl mx-auto pb-24">
+      <div className="relative z-10 p-6 pt-20 max-w-4xl mx-auto pb-24">
         <div className="flex items-center mb-8">
           <Link href="/" className="p-2 rounded-full hover:bg-muted transition mr-4">
             <ArrowLeft className="w-6 h-6" />

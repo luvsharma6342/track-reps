@@ -186,7 +186,7 @@ export default function WorkoutPage() {
         }}
       />
 
-      <div className="relative z-10 min-h-screen p-6 max-w-2xl mx-auto pb-24">
+      <div className="relative z-10 min-h-screen p-6 pt-20 max-w-2xl mx-auto pb-24">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-bold flex items-center">
             <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse mr-3"></div>
