@@ -53,11 +53,8 @@ export function Navbar() {
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <Link href="/login" className="text-sm font-medium hover:text-primary transition px-3 py-2 rounded-md hover:bg-muted">
-                    Log In
-                  </Link>
                   <Link href="/login" className="text-sm font-medium bg-primary text-primary-foreground px-4 py-2 rounded-full hover:bg-primary/90 transition shadow-sm">
-                    Sign Up
+                    Log In
                   </Link>
                 </div>
               )}
