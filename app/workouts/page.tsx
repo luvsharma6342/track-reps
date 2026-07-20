@@ -31,6 +31,8 @@ export default function WorkoutPage() {
   // Inline search/filter state
   const [search, setSearch] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [isAddingFromLibrary, setIsAddingFromLibrary] = useState(false);
+  const [isSubmittingExercise, setIsSubmittingExercise] = useState(false);
 
   useEffect(() => {
     getExercises().then(setExercises);
@@ -102,6 +104,7 @@ export default function WorkoutPage() {
     setActiveExercises([...activeExercises, { ...exercise, sets: [], previousSets: previousSets || [] }]);
     setSearch("");
     setAddingExerciseId(null);
+    setIsAddingFromLibrary(false);
   };
 
   const handleDeleteExercise = async (exerciseId: string) => {
@@ -123,12 +126,14 @@ export default function WorkoutPage() {
 
   const handleCreateNewExercise = async () => {
     if (!newExerciseName.trim()) return;
+    setIsSubmittingExercise(true);
     const newEx = await createExercise({ name: newExerciseName, bodyPart: newExerciseBodyPart }); 
     setExercises([...exercises, newEx]);
     handleAddExercise(newEx);
     setIsCreatingExercise(false);
     setNewExerciseName("");
     setSearch("");
+    setIsSubmittingExercise(false);
   };
 
   const filteredExercises = exercises.filter(ex => {
@@ -293,125 +298,152 @@ export default function WorkoutPage() {
             </div>
           ))}
 
-          {/* Inline Exercise Library */}
-          <div className="mt-10 mb-6 bg-secondary p-6 rounded-3xl border border-border">
-            <h2 className="text-xl font-bold text-foreground mb-4">Add from Library</h2>
-            
-            <div className="relative mb-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
-              <input 
-                type="text" 
-                placeholder="Search exercises..." 
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                className="w-full bg-input rounded-xl pl-10 pr-4 py-3 text-foreground border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
-              />
-            </div>
-
-            <div className="flex space-x-2 overflow-x-auto pb-2 mb-4 scrollbar-hide">
-              <button 
-                onClick={() => setSelectedTag(null)}
-                className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-medium transition ${!selectedTag ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
-              >
-                All
-              </button>
-              {BODY_PARTS.map(part => (
-                <button 
-                  key={part}
-                  onClick={() => setSelectedTag(part)}
-                  className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-medium transition ${selectedTag === part ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
-                >
-                  {part}
-                </button>
-              ))}
-            </div>
-
-            <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2 scrollbar-hide">
-              {filteredExercises.map(ex => (
-                <button 
-                  key={ex.id}
-                  onClick={() => handleAddExercise(ex)}
-                  disabled={addingExerciseId === ex.id}
-                  className="w-full text-left p-4 rounded-xl glass border-border hover:border-primary/30 transition flex items-center justify-between group disabled:opacity-50"
-                >
-                  <div>
-                    <div className="font-medium text-foreground">{ex.name}</div>
-                    <div className="text-xs text-muted-foreground mt-1">{ex.bodyPart}</div>
-                  </div>
-                  {addingExerciseId === ex.id ? (
-                    <Loader2 className="w-5 h-5 text-primary animate-spin" />
-                  ) : (
-                    <Plus className="w-5 h-5 text-primary opacity-0 group-hover:opacity-100 transition" />
-                  )}
-                </button>
-              ))}
-              
-              {search && filteredExercises.length === 0 && (
-                <div className="text-center py-8 text-muted-foreground glass rounded-2xl border-border">
-                  <p className="mb-4">Exercise not found.</p>
-                  <button 
-                    onClick={() => {
-                      setNewExerciseName(search);
-                      setNewExerciseBodyPart(selectedTag || BODY_PARTS[0]);
-                      setIsCreatingExercise(true);
-                    }}
-                    className="px-6 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition shadow-lg shadow-primary/20 inline-flex items-center"
-                  >
-                    <Plus className="w-5 h-5 mr-2" />
-                    Create New Exercise
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
+          {/* Add Exercise Button */}
+          <button 
+            onClick={() => setIsAddingFromLibrary(true)}
+            className="w-full mt-6 flex items-center justify-center gap-2 py-4 bg-secondary text-secondary-foreground rounded-2xl font-bold hover:bg-secondary/80 transition-colors border border-border border-dashed"
+          >
+            <Plus className="w-5 h-5" /> Add an Exercise
+          </button>
         </div>
 
-        {/* Create New Exercise Modal */}
-        {isCreatingExercise && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in">
-            <div className="glass-card w-full max-w-md rounded-2xl p-6 animate-scale-in">
-              <h2 className="text-2xl font-bold mb-4">Create New Exercise</h2>
+        {/* Add from Library Modal */}
+        {isAddingFromLibrary && (
+          <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-[100] flex flex-col animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex-1 container max-w-2xl mx-auto flex flex-col p-4 pt-10 h-full">
+              <h2 className="text-2xl font-bold mb-6">Add an Exercise</h2>
               
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-muted-foreground mb-1">Exercise Name</label>
-                  <input 
-                    type="text" 
-                    value={newExerciseName}
-                    onChange={e => setNewExerciseName(e.target.value)}
-                    className="w-full bg-input rounded-xl px-4 py-3 text-foreground border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none"
-                    placeholder="e.g. Bench Press"
-                    autoFocus
-                  />
+              <div className="relative mb-6">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                <input 
+                  type="text" 
+                  placeholder="Search exercises..." 
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  className="w-full bg-input rounded-xl pl-10 pr-4 py-3 text-foreground border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+                  autoFocus
+                />
+              </div>
+
+              <div className="flex-1 flex flex-col min-h-0">
+                <div className="flex items-center justify-between mb-3">
+                  <label className="block text-sm font-medium text-muted-foreground">Select Exercise</label>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-muted-foreground mb-1">Body Part</label>
-                  <select 
-                    value={newExerciseBodyPart}
-                    onChange={e => setNewExerciseBodyPart(e.target.value)}
-                    className="w-full bg-input rounded-xl px-4 py-3 text-foreground border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none"
+                {/* Tag Filters */}
+                <div className="flex space-x-2 overflow-x-auto pb-2 mb-4 scrollbar-hide">
+                  <button 
+                    onClick={() => setSelectedTag(null)}
+                    className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-medium transition ${!selectedTag ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
                   >
-                    {BODY_PARTS.map(part => (
-                      <option key={part} value={part}>{part}</option>
-                    ))}
-                  </select>
+                    All
+                  </button>
+                  {BODY_PARTS.map(part => (
+                    <button 
+                      key={part}
+                      onClick={() => setSelectedTag(part)}
+                      className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-medium transition ${selectedTag === part ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
+                    >
+                      {part}
+                    </button>
+                  ))}
                 </div>
 
-                <div className="flex space-x-3 pt-4">
-                  <button 
-                    onClick={() => setIsCreatingExercise(false)}
-                    className="flex-1 py-3 rounded-xl font-medium text-muted-foreground hover:bg-muted transition"
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    onClick={handleCreateNewExercise}
-                    className="flex-1 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition shadow-lg shadow-primary/20"
-                  >
-                    Save & Add
-                  </button>
+                <div className="flex-1 overflow-y-auto pr-2 space-y-2">
+                  {/* Custom Exercise inline button/form */}
+                  {!isCreatingExercise ? (
+                    <button
+                      onClick={() => {
+                        if (search) setNewExerciseName(search);
+                        setNewExerciseBodyPart(selectedTag || BODY_PARTS[0]);
+                        setIsCreatingExercise(true);
+                      }}
+                      className="w-full p-4 mb-2 border border-dashed border-border hover:border-primary/50 text-muted-foreground hover:text-foreground rounded-xl flex items-center justify-center gap-2 transition-colors"
+                    >
+                      <Plus className="w-4 h-4" /> Create Custom Exercise
+                    </button>
+                  ) : (
+                    <div className="p-4 mb-2 border border-border rounded-xl bg-muted/30 space-y-3">
+                      <input 
+                        type="text" 
+                        placeholder="Exercise Name"
+                        value={newExerciseName}
+                        onChange={e => setNewExerciseName(e.target.value)}
+                        className="w-full bg-input rounded-xl px-4 py-2 text-foreground border border-border focus:border-primary outline-none"
+                        autoFocus
+                      />
+                      <select 
+                        value={newExerciseBodyPart}
+                        onChange={e => setNewExerciseBodyPart(e.target.value)}
+                        className="w-full bg-input rounded-xl px-4 py-2 text-foreground border border-border focus:border-primary outline-none appearance-none"
+                      >
+                        {BODY_PARTS.map(part => (
+                          <option key={part} value={part}>{part}</option>
+                        ))}
+                      </select>
+                      <div className="flex gap-2 pt-1">
+                        <button 
+                          onClick={() => setIsCreatingExercise(false)}
+                          className="flex-1 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-xl transition"
+                        >
+                          Cancel
+                        </button>
+                        <button 
+                          onClick={handleCreateNewExercise}
+                          disabled={!newExerciseName.trim() || isSubmittingExercise}
+                          className="flex-1 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition disabled:opacity-50 flex justify-center"
+                        >
+                          {isSubmittingExercise ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save & Add"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {filteredExercises.map(ex => (
+                    <button 
+                      key={ex.id}
+                      onClick={() => handleAddExercise(ex)}
+                      disabled={addingExerciseId === ex.id}
+                      className="w-full text-left p-4 rounded-xl glass border-border hover:border-primary/50 transition flex items-center justify-between group disabled:opacity-50"
+                    >
+                      <div>
+                        <div className="font-medium text-foreground">{ex.name}</div>
+                        <div className="text-xs text-muted-foreground mt-1">{ex.bodyPart}</div>
+                      </div>
+                      {addingExerciseId === ex.id ? (
+                        <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                      ) : (
+                        <Plus className="w-5 h-5 text-primary opacity-0 group-hover:opacity-100 transition" />
+                      )}
+                    </button>
+                  ))}
+                  
+                  {search && filteredExercises.length === 0 && !isCreatingExercise && (
+                    <div className="text-center py-8 text-muted-foreground glass rounded-2xl border-border">
+                      <p className="mb-4">Exercise not found.</p>
+                      <button 
+                        onClick={() => {
+                          setNewExerciseName(search);
+                          setNewExerciseBodyPart(selectedTag || BODY_PARTS[0]);
+                          setIsCreatingExercise(true);
+                        }}
+                        className="px-6 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition shadow-lg shadow-primary/20 inline-flex items-center"
+                      >
+                        <Plus className="w-5 h-5 mr-2" />
+                        Create "{search}"
+                      </button>
+                    </div>
+                  )}
                 </div>
+              </div>
+
+              <div className="pt-4 flex gap-3 mt-auto pb-8">
+                <button
+                  onClick={() => setIsAddingFromLibrary(false)}
+                  className="w-full bg-muted text-muted-foreground hover:bg-muted/80 py-4 rounded-xl font-semibold transition-all"
+                >
+                  Close
+                </button>
               </div>
             </div>
           </div>
