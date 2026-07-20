@@ -64,10 +64,10 @@ export default function WorkoutPage() {
           reconstructed.push(...Array.from(grouped.values()));
         }
 
-        for (const ex of reconstructed) {
+        await Promise.all(reconstructed.map(async (ex) => {
           const prev = await getPreviousSession(ex.id);
           ex.previousSets = prev || [];
-        }
+        }));
         setActiveExercises(reconstructed);
       }
       setIsInitializing(false);
