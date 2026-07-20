@@ -337,7 +337,7 @@ export default function RoutinesPage() {
                     className={`w-full text-left p-4 rounded-xl border flex items-center justify-between transition-colors ${
                       selectedExerciseIds.includes(exercise.id) 
                         ? "bg-primary/10 border-primary text-primary" 
-                        : "bg-card border-border hover:border-primary/50 text-card-foreground"
+                        : "glass border-border hover:border-primary/50 text-foreground"
                     }`}
                   >
                     <div>
