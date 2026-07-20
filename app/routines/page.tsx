@@ -73,7 +73,20 @@ export default function RoutinesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground pb-24">
+    <div className="relative min-h-screen bg-background text-foreground pb-24">
+      {/* Dynamic Multi-Color Background */}
+      <div 
+        className="absolute inset-0 w-full h-full opacity-50 pointer-events-none z-0 fixed"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 85% 85%, rgba(14, 165, 233, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 85% 15%, rgba(99, 102, 241, 0.25) 0%, transparent 50%),
+            radial-gradient(circle at 15% 85%, rgba(6, 182, 212, 0.25) 0%, transparent 50%)
+          `
+        }}
+      />
+
       {/* Header */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
         <div className="container max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
@@ -90,7 +103,7 @@ export default function RoutinesPage() {
         </div>
       </header>
 
-      <main className="container max-w-4xl mx-auto px-4 py-8">
+      <main className="relative z-10 container max-w-4xl mx-auto px-4 py-8">
         
         {templates.length === 0 && !isCreating ? (
           <div className="text-center py-20 bg-card rounded-2xl border border-border shadow-sm">
