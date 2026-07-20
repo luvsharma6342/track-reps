@@ -171,7 +171,7 @@ export default function RoutinesPage() {
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">
             {templates.map(template => (
-              <div key={template.id} className="bg-card rounded-2xl p-5 border border-border shadow-sm flex flex-col hover:border-primary/50 transition-colors">
+              <div key={template.id} className="glass rounded-2xl p-5 border border-border shadow-sm flex flex-col hover:border-primary/50 transition-colors">
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="text-lg font-bold">{template.name}</h3>
                   {confirmDeleteId === template.id ? (
