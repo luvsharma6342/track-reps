@@ -397,3 +397,91 @@ export async function deleteBodyMetrics(id: string) {
     where: { id }
   });
 }
+
+// ----------------------
+// TEMPLATES
+// ----------------------
+
+export async function getTemplates() {
+  const userId = await getSessionUserId();
+  
+  return prisma.template.findMany({
+    where: { userId },
+    include: {
+      exercises: {
+        include: { exercise: true },
+        orderBy: { order: 'asc' }
+      }
+    },
+    orderBy: { createdAt: 'desc' }
+  });
+}
+
+export async function createTemplate(name: string, exerciseIds: string[]) {
+  const userId = await getSessionUserId();
+  
+  const template = await prisma.template.create({
+    data: {
+      userId,
+      name,
+      exercises: {
+        create: exerciseIds.map((id, index) => ({
+          exerciseId: id,
+          order: index
+        }))
+      }
+    }
+  });
+  revalidatePath("/routines");
+  return template;
+}
+
+export async function deleteTemplate(id: string) {
+  const userId = await getSessionUserId();
+  
+  const template = await prisma.template.findUnique({
+    where: { id }
+  });
+  if (!template || template.userId !== userId) {
+    throw new Error("Not authorized or template not found");
+  }
+
+  await prisma.template.delete({
+    where: { id }
+  });
+  revalidatePath("/routines");
+}
+
+export async function startWorkoutFromTemplate(templateId: string) {
+  const userId = await getSessionUserId();
+  
+  // Finish any lingering active workouts first
+  await prisma.workout.updateMany({
+    where: { userId, endTime: null },
+    data: { endTime: new Date() }
+  });
+
+  const template = await prisma.template.findUnique({
+    where: { id: templateId },
+    include: { exercises: { orderBy: { order: 'asc' } } }
+  });
+
+  if (!template || template.userId !== userId) throw new Error("Template not found");
+
+  const workout = await prisma.workout.create({
+    data: {
+      userId,
+      date: new Date(),
+      workoutExercises: {
+        create: template.exercises.map(te => ({
+          exerciseId: te.exerciseId,
+        }))
+      }
+    }
+  });
+  
+  revalidatePath("/");
+  revalidatePath("/workouts");
+  revalidatePath("/today");
+  return workout;
+}

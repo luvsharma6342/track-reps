@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Dumbbell, Activity, TrendingUp, Flame, Zap, Calendar, Play, Scale } from "lucide-react";
+import { Dumbbell, Activity, TrendingUp, Flame, Zap, Calendar, Play, Scale, ClipboardList } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import { useState, useEffect } from "react";
 import { getActiveWorkout } from "@/app/actions";
@@ -75,6 +75,14 @@ export default function Dashboard() {
               )}
             </Link>
             
+            <Link href={session ? "/routines" : "/login"} className="w-full sm:w-auto">
+              <button 
+                className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-purple-400/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] hover:bg-muted hover:scale-105 active:scale-95"
+              >
+                <ClipboardList className="w-5 h-5 text-purple-500" />
+                Templates
+              </button>
+            </Link>
             <Link href={session ? "/exercises" : "/login"} className="w-full sm:w-auto">
               <button 
                 className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] hover:bg-muted hover:scale-105 active:scale-95"
