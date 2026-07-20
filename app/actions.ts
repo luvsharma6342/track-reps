@@ -436,6 +436,39 @@ export async function createTemplate(name: string, exerciseIds: string[]) {
   return template;
 }
 
+export async function updateTemplate(id: string, name: string, exerciseIds: string[]) {
+  const userId = await getSessionUserId();
+  
+  const template = await prisma.template.findUnique({
+    where: { id }
+  });
+  if (!template || template.userId !== userId) {
+    throw new Error("Not authorized or template not found");
+  }
+
+  // Delete existing relationships
+  await prisma.templateExercise.deleteMany({
+    where: { templateId: id }
+  });
+
+  // Update name and create new relationships
+  const updated = await prisma.template.update({
+    where: { id },
+    data: {
+      name,
+      exercises: {
+        create: exerciseIds.map((exId, index) => ({
+          exerciseId: exId,
+          order: index
+        }))
+      }
+    }
+  });
+
+  revalidatePath("/routines");
+  return updated;
+}
+
 export async function deleteTemplate(id: string) {
   const userId = await getSessionUserId();
   

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Play, Search, Loader2, Dumbbell, ClipboardList, Check, X } from "lucide-react";
+import { Plus, Trash2, Play, Search, Loader2, Dumbbell, ClipboardList, Check, X, Edit2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { getTemplates, createTemplate, deleteTemplate, startWorkoutFromTemplate, getExercises, createExercise } from "@/app/actions";
+import { getTemplates, createTemplate, updateTemplate, deleteTemplate, startWorkoutFromTemplate, getExercises, createExercise } from "@/app/actions";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 
@@ -18,6 +18,7 @@ export default function RoutinesPage() {
   const [isLoading, setIsLoading] = useState(true);
   
   const [isCreating, setIsCreating] = useState(false);
+  const [editingTemplateId, setEditingTemplateId] = useState<string | null>(null);
   const [newTemplateName, setNewTemplateName] = useState("");
   const [selectedExerciseIds, setSelectedExerciseIds] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,15 +56,34 @@ export default function RoutinesPage() {
     );
   }
 
-  const handleCreate = async () => {
+  const handleSaveTemplate = async () => {
     if (!newTemplateName.trim() || selectedExerciseIds.length === 0) return;
     setIsSubmitting(true);
-    await createTemplate(newTemplateName, selectedExerciseIds);
+    if (editingTemplateId) {
+      await updateTemplate(editingTemplateId, newTemplateName, selectedExerciseIds);
+    } else {
+      await createTemplate(newTemplateName, selectedExerciseIds);
+    }
     setTemplates(await getTemplates());
     setIsCreating(false);
+    setEditingTemplateId(null);
     setNewTemplateName("");
     setSelectedExerciseIds([]);
     setIsSubmitting(false);
+  };
+
+  const openEditModal = (template: any) => {
+    setNewTemplateName(template.name);
+    setSelectedExerciseIds(template.exercises.map((te: any) => te.exerciseId));
+    setEditingTemplateId(template.id);
+    setIsCreating(true);
+  };
+
+  const closeMenu = () => {
+    setIsCreating(false);
+    setEditingTemplateId(null);
+    setNewTemplateName("");
+    setSelectedExerciseIds([]);
   };
 
   const handleDelete = async (id: string) => {
@@ -123,7 +143,10 @@ export default function RoutinesPage() {
             Routines
           </h1>
           <button 
-            onClick={() => setIsCreating(true)}
+            onClick={() => {
+              closeMenu();
+              setIsCreating(true);
+            }}
             className="flex items-center gap-1 bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-semibold hover:bg-primary/90 transition-all shadow-sm"
           >
             <Plus className="w-4 h-4" /> New
@@ -169,12 +192,20 @@ export default function RoutinesPage() {
                       </button>
                     </div>
                   ) : (
-                    <button 
-                      onClick={() => setConfirmDeleteId(template.id)}
-                      className="text-muted-foreground hover:text-destructive transition-colors p-1"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button 
+                        onClick={() => openEditModal(template)}
+                        className="text-muted-foreground hover:text-primary transition-colors p-1"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => setConfirmDeleteId(template.id)}
+                        className="text-muted-foreground hover:text-destructive transition-colors p-1"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   )}
                 </div>
                 
@@ -209,11 +240,11 @@ export default function RoutinesPage() {
         <div className="h-20" />
       </main>
 
-      {/* Create Modal */}
+      {/* Create / Edit Modal */}
       {isCreating && (
         <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-[100] flex flex-col animate-in fade-in zoom-in-95 duration-200">
           <div className="flex-1 container max-w-2xl mx-auto flex flex-col p-4 pt-10 h-full">
-            <h2 className="text-2xl font-bold mb-6">New Routine</h2>
+            <h2 className="text-2xl font-bold mb-6">{editingTemplateId ? "Edit Routine" : "New Routine"}</h2>
             
             <div className="space-y-4 mb-6">
               <div>
@@ -325,13 +356,13 @@ export default function RoutinesPage() {
 
             <div className="pt-4 flex gap-3 mt-auto pb-8">
               <button
-                onClick={() => setIsCreating(false)}
+                onClick={closeMenu}
                 className="flex-1 bg-muted text-muted-foreground hover:bg-muted/80 py-4 rounded-xl font-semibold transition-all"
               >
                 Cancel
               </button>
               <button
-                onClick={handleCreate}
+                onClick={handleSaveTemplate}
                 disabled={!newTemplateName.trim() || selectedExerciseIds.length === 0 || isSubmitting}
                 className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-primary/25 disabled:opacity-50 disabled:shadow-none flex justify-center"
               >
