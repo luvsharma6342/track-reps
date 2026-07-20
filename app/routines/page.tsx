@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Play, Search, Loader2, Dumbbell, ClipboardList, Check, X, Edit2 } from "lucide-react";
+import { Plus, Trash2, Play, Search, Loader2, Dumbbell, ClipboardList, Check, X, Edit2, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { getTemplates, createTemplate, updateTemplate, deleteTemplate, startWorkoutFromTemplate, getExercises, createExercise } from "@/app/actions";
 import { useSession } from "@/lib/auth-client";
@@ -138,10 +138,15 @@ export default function RoutinesPage() {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
         <div className="container max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-          <h1 className="text-xl font-bold flex items-center gap-2">
-            <ClipboardList className="w-6 h-6 text-primary" />
-            Routines
-          </h1>
+          <div className="flex items-center gap-2">
+            <Link href="/" className="mr-2 p-2 rounded-full hover:bg-muted transition">
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+            <h1 className="text-xl font-bold flex items-center gap-2">
+              <ClipboardList className="w-6 h-6 text-primary" />
+              Routines
+            </h1>
+          </div>
           <button 
             onClick={() => {
               closeMenu();
