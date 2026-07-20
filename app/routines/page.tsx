@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Play, Search, Loader2, Dumbbell, ClipboardList } from "lucide-react";
+import { Plus, Trash2, Play, Search, Loader2, Dumbbell, ClipboardList, Check, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { getTemplates, createTemplate, deleteTemplate, startWorkoutFromTemplate, getExercises } from "@/app/actions";
+import { getTemplates, createTemplate, deleteTemplate, startWorkoutFromTemplate, getExercises, createExercise } from "@/app/actions";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
+
+const BODY_PARTS = ["Chest", "Back", "Legs", "Arms", "Shoulders", "Core", "Cardio", "Biceps", "Triceps"];
 
 export default function RoutinesPage() {
   const { data: session, isPending: isAuthPending } = useSession();
@@ -21,6 +23,12 @@ export default function RoutinesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [startingTemplateId, setStartingTemplateId] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  
+  const [isCreatingCustomExercise, setIsCreatingCustomExercise] = useState(false);
+  const [newCustomExerciseName, setNewCustomExerciseName] = useState("");
+  const [newCustomExerciseBodyPart, setNewCustomExerciseBodyPart] = useState(BODY_PARTS[0]);
+  const [isSubmittingExercise, setIsSubmittingExercise] = useState(false);
 
   useEffect(() => {
     if (!isAuthPending && !session) {
@@ -54,10 +62,25 @@ export default function RoutinesPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this routine?")) {
-      await deleteTemplate(id);
-      setTemplates(await getTemplates());
-    }
+    await deleteTemplate(id);
+    setTemplates(await getTemplates());
+    setConfirmDeleteId(null);
+  };
+
+  const handleCreateCustomExercise = async () => {
+    if (!newCustomExerciseName.trim()) return;
+    setIsSubmittingExercise(true);
+    const newEx = await createExercise({
+      name: newCustomExerciseName,
+      bodyPart: newCustomExerciseBodyPart
+    });
+    const allExercises = await getExercises();
+    setExercises(allExercises);
+    setSelectedExerciseIds([...selectedExerciseIds, newEx.id]);
+    setIsCreatingCustomExercise(false);
+    setNewCustomExerciseName("");
+    setNewCustomExerciseBodyPart(BODY_PARTS[0]);
+    setIsSubmittingExercise(false);
   };
 
   const handleStart = async (id: string) => {
@@ -123,12 +146,31 @@ export default function RoutinesPage() {
               <div key={template.id} className="bg-card rounded-2xl p-5 border border-border shadow-sm flex flex-col hover:border-primary/50 transition-colors">
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="text-lg font-bold">{template.name}</h3>
-                  <button 
-                    onClick={() => handleDelete(template.id)}
-                    className="text-muted-foreground hover:text-destructive transition-colors p-1"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  {confirmDeleteId === template.id ? (
+                    <div className="flex items-center gap-1">
+                      <button 
+                        onClick={() => handleDelete(template.id)}
+                        className="w-8 h-8 flex items-center justify-center text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
+                        title="Confirm Delete"
+                      >
+                        <Check className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => setConfirmDeleteId(null)}
+                        className="w-8 h-8 flex items-center justify-center text-muted-foreground bg-muted hover:bg-secondary rounded-lg transition-colors"
+                        title="Cancel"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <button 
+                      onClick={() => setConfirmDeleteId(template.id)}
+                      className="text-muted-foreground hover:text-destructive transition-colors p-1"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
                 
                 <div className="flex-1 mb-6">
@@ -206,6 +248,51 @@ export default function RoutinesPage() {
                     )}
                   </button>
                 ))}
+
+                {/* Custom Exercise inline button/form */}
+                {!isCreatingCustomExercise ? (
+                  <button
+                    onClick={() => setIsCreatingCustomExercise(true)}
+                    className="w-full p-4 border border-dashed border-border hover:border-primary/50 text-muted-foreground hover:text-foreground rounded-xl flex items-center justify-center gap-2 transition-colors"
+                  >
+                    <Plus className="w-4 h-4" /> Create Custom Exercise
+                  </button>
+                ) : (
+                  <div className="p-4 border border-border rounded-xl bg-muted/30 space-y-3">
+                    <input 
+                      type="text" 
+                      placeholder="Exercise Name"
+                      value={newCustomExerciseName}
+                      onChange={e => setNewCustomExerciseName(e.target.value)}
+                      className="w-full bg-input rounded-xl px-4 py-2 text-foreground border border-border focus:border-primary outline-none"
+                      autoFocus
+                    />
+                    <select 
+                      value={newCustomExerciseBodyPart}
+                      onChange={e => setNewCustomExerciseBodyPart(e.target.value)}
+                      className="w-full bg-input rounded-xl px-4 py-2 text-foreground border border-border focus:border-primary outline-none appearance-none"
+                    >
+                      {BODY_PARTS.map(part => (
+                        <option key={part} value={part}>{part}</option>
+                      ))}
+                    </select>
+                    <div className="flex gap-2 pt-1">
+                      <button 
+                        onClick={() => setIsCreatingCustomExercise(false)}
+                        className="flex-1 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-xl transition"
+                      >
+                        Cancel
+                      </button>
+                      <button 
+                        onClick={handleCreateCustomExercise}
+                        disabled={!newCustomExerciseName.trim() || isSubmittingExercise}
+                        className="flex-1 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition disabled:opacity-50 flex justify-center"
+                      >
+                        {isSubmittingExercise ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save"}
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
