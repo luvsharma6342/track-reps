@@ -59,55 +59,55 @@ export default function Dashboard() {
           <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 mb-24 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
             <Link href={session ? "/workouts" : "/login"} className="w-full sm:w-auto">
               {hasActiveWorkout ? (
-                <button 
-                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(14,165,233,0.5)] hover:shadow-[0_0_60px_rgba(14,165,233,0.7)] transition-all border border-white/10 hover:scale-105 active:scale-95 animate-pulse"
+                <div 
+                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(14,165,233,0.5)] hover:shadow-[0_0_60px_rgba(14,165,233,0.7)] transition-all border border-white/10 hover:scale-105 active:scale-95 animate-pulse cursor-pointer"
                 >
                   <Play className="w-5 h-5 fill-current text-white" />
                   Resume Workout
-                </button>
+                </div>
               ) : (
-                <button 
-                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(37,99,235,0.5)] hover:shadow-[0_0_60px_rgba(37,99,235,0.7)] transition-all border border-white/10 hover:scale-105 active:scale-95"
+                <div 
+                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-2xl flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(37,99,235,0.5)] hover:shadow-[0_0_60px_rgba(37,99,235,0.7)] transition-all border border-white/10 hover:scale-105 active:scale-95 cursor-pointer"
                 >
                   <Zap className="w-5 h-5 fill-current text-sky-300" />
                   Start a Workout
-                </button>
+                </div>
               )}
             </Link>
             
             <Link href={session ? "/routines" : "/login"} className="w-full sm:w-auto">
-              <button 
-                className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-purple-400/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] hover:bg-muted hover:scale-105 active:scale-95"
+              <div 
+                className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-purple-400/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] hover:bg-muted hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <ClipboardList className="w-5 h-5 text-purple-500" />
                 Templates
-              </button>
+              </div>
             </Link>
             <Link href={session ? "/exercises" : "/login"} className="w-full sm:w-auto">
-              <button 
-                className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] hover:bg-muted hover:scale-105 active:scale-95"
+              <div 
+                className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] hover:bg-muted hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <Dumbbell className="w-5 h-5 text-cyan-500" />
                 Manage Library
-              </button>
+              </div>
             </Link>
 
             <Link href={session ? "/today" : "/login"} className="w-full sm:w-auto">
-              <button 
-                className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-emerald-400/50 hover:shadow-[0_0_20px_rgba(52,211,153,0.2)] hover:bg-muted hover:scale-105 active:scale-95"
+              <div 
+                className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-emerald-400/50 hover:shadow-[0_0_20px_rgba(52,211,153,0.2)] hover:bg-muted hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <Calendar className="w-5 h-5 text-emerald-500" />
                 Today's Session
-              </button>
+              </div>
             </Link>
 
             <Link href={session ? "/metrics" : "/login"} className="w-full sm:w-auto">
-              <button 
-                className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(45,212,191,0.2)] hover:bg-muted hover:scale-105 active:scale-95"
+              <div 
+                className="w-full sm:w-auto px-8 py-4 glass text-foreground font-semibold rounded-2xl flex items-center justify-center gap-3 transition-all hover:border-teal-400/50 hover:shadow-[0_0_20px_rgba(45,212,191,0.2)] hover:bg-muted hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <Scale className="w-5 h-5 text-teal-500" />
                 Body Metrics
-              </button>
+              </div>
             </Link>
           </div>
 
