@@ -29,6 +29,11 @@ export default function RoutinesPage() {
   const [newCustomExerciseName, setNewCustomExerciseName] = useState("");
   const [newCustomExerciseBodyPart, setNewCustomExerciseBodyPart] = useState(BODY_PARTS[0]);
   const [isSubmittingExercise, setIsSubmittingExercise] = useState(false);
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+
+  const filteredExercises = selectedTag 
+    ? exercises.filter(ex => ex.bodyPart === selectedTag)
+    : exercises;
 
   useEffect(() => {
     if (!isAuthPending && !session) {
@@ -225,40 +230,40 @@ export default function RoutinesPage() {
             </div>
 
             <div className="flex-1 flex flex-col min-h-0">
-              <label className="block text-sm font-medium text-muted-foreground mb-3">Select Exercises</label>
-              <div className="flex-1 overflow-y-auto pr-2 space-y-2">
-                {exercises.map(exercise => (
-                  <button
-                    key={exercise.id}
-                    onClick={() => toggleExerciseSelection(exercise.id)}
-                    className={`w-full text-left p-4 rounded-xl border flex items-center justify-between transition-colors ${
-                      selectedExerciseIds.includes(exercise.id) 
-                        ? "bg-primary/10 border-primary text-primary" 
-                        : "bg-card border-border hover:border-primary/50 text-card-foreground"
-                    }`}
+              <div className="flex items-center justify-between mb-3">
+                <label className="block text-sm font-medium text-muted-foreground">Select Exercises</label>
+              </div>
+
+              {/* Tag Filters */}
+              <div className="flex space-x-2 overflow-x-auto pb-2 mb-4 scrollbar-hide">
+                <button 
+                  onClick={() => setSelectedTag(null)}
+                  className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-medium transition ${!selectedTag ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
+                >
+                  All
+                </button>
+                {BODY_PARTS.map(part => (
+                  <button 
+                    key={part}
+                    onClick={() => setSelectedTag(part)}
+                    className={`px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-medium transition ${selectedTag === part ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-secondary'}`}
                   >
-                    <div>
-                      <div className="font-semibold">{exercise.name}</div>
-                      <div className="text-xs opacity-70">{exercise.bodyPart}</div>
-                    </div>
-                    {selectedExerciseIds.includes(exercise.id) && (
-                      <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-                        <span className="text-xs font-bold">{selectedExerciseIds.indexOf(exercise.id) + 1}</span>
-                      </div>
-                    )}
+                    {part}
                   </button>
                 ))}
+              </div>
 
-                {/* Custom Exercise inline button/form */}
+              <div className="flex-1 overflow-y-auto pr-2 space-y-2">
+                {/* Custom Exercise inline button/form moved to top */}
                 {!isCreatingCustomExercise ? (
                   <button
                     onClick={() => setIsCreatingCustomExercise(true)}
-                    className="w-full p-4 border border-dashed border-border hover:border-primary/50 text-muted-foreground hover:text-foreground rounded-xl flex items-center justify-center gap-2 transition-colors"
+                    className="w-full p-4 mb-2 border border-dashed border-border hover:border-primary/50 text-muted-foreground hover:text-foreground rounded-xl flex items-center justify-center gap-2 transition-colors"
                   >
                     <Plus className="w-4 h-4" /> Create Custom Exercise
                   </button>
                 ) : (
-                  <div className="p-4 border border-border rounded-xl bg-muted/30 space-y-3">
+                  <div className="p-4 mb-2 border border-border rounded-xl bg-muted/30 space-y-3">
                     <input 
                       type="text" 
                       placeholder="Exercise Name"
@@ -293,6 +298,28 @@ export default function RoutinesPage() {
                     </div>
                   </div>
                 )}
+
+                {filteredExercises.map(exercise => (
+                  <button
+                    key={exercise.id}
+                    onClick={() => toggleExerciseSelection(exercise.id)}
+                    className={`w-full text-left p-4 rounded-xl border flex items-center justify-between transition-colors ${
+                      selectedExerciseIds.includes(exercise.id) 
+                        ? "bg-primary/10 border-primary text-primary" 
+                        : "bg-card border-border hover:border-primary/50 text-card-foreground"
+                    }`}
+                  >
+                    <div>
+                      <div className="font-semibold">{exercise.name}</div>
+                      <div className="text-xs opacity-70">{exercise.bodyPart}</div>
+                    </div>
+                    {selectedExerciseIds.includes(exercise.id) && (
+                      <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+                        <span className="text-xs font-bold">{selectedExerciseIds.indexOf(exercise.id) + 1}</span>
+                      </div>
+                    )}
+                  </button>
+                ))}
               </div>
             </div>
 
