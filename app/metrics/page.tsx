@@ -109,8 +109,8 @@ export default function MetricsPage() {
         className="absolute inset-0 w-full h-full opacity-30 pointer-events-none z-0 fixed"
         style={{
           backgroundImage: `
-            radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.25) 0%, transparent 50%),
-            radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.25) 0%, transparent 50%)
+            radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.25) 0%, transparent 50%),
+            radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.25) 0%, transparent 50%)
           `
         }}
       />

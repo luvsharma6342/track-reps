@@ -28,44 +28,44 @@
 }
 
 :root {
-  --background: #f8fafc;
+  --background: #f0f9ff;
   --foreground: #0f172a;
   --card: #ffffff;
   --card-foreground: #0f172a;
-  --primary: #3b82f6;
+  --primary: #ec4899; /* Vibrant Pink */
   --primary-foreground: #ffffff;
-  --secondary: #e2e8f0;
-  --secondary-foreground: #0f172a;
-  --accent: #38bdf8;
+  --secondary: #10b981; /* Vibrant Green */
+  --secondary-foreground: #ffffff;
+  --accent: #f43f5e; /* Vibrant Rose/Red */
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
   --border: #e2e8f0;
   --input: #f1f5f9;
-  --ring: #3b82f6;
+  --ring: #ec4899;
   --muted: #f1f5f9;
   --muted-foreground: #64748b;
   --radius: 0.75rem;
 }
 
 .dark {
-  --background: #020617;
-  --foreground: #eef2ff;
-  --card: #0f172a;
-  --card-foreground: #eef2ff;
-  --primary: #3b82f6;
+  --background: #081021; /* Deep bluish navy */
+  --foreground: #f8fafc;
+  --card: #111a31; /* Slightly lighter navy for cards */
+  --card-foreground: #f8fafc;
+  --primary: #ec4899; /* Vibrant Pink */
   --primary-foreground: #ffffff;
-  --secondary: #1e293b;
-  --secondary-foreground: #eef2ff;
-  --accent: #38bdf8;
+  --secondary: #10b981; /* Vibrant Green */
+  --secondary-foreground: #ffffff;
+  --accent: #f43f5e; /* Vibrant Rose/Red */
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
   --border: rgba(255, 255, 255, 0.1);
-  --input: #1e293b;
-  --ring: #3b82f6;
+  --input: #17223b;
+  --ring: #ec4899;
   --muted: rgba(255, 255, 255, 0.05);
-  --muted-foreground: #9ca3af;
+  --muted-foreground: #94a3b8;
 }
 
 body {

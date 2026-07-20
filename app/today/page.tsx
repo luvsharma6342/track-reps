@@ -137,10 +137,10 @@ export default function TodaysSessionPage() {
         className="absolute inset-0 w-full h-full opacity-50 pointer-events-none z-0 fixed"
         style={{
           backgroundImage: `
-            radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
-            radial-gradient(circle at 85% 85%, rgba(14, 165, 233, 0.3) 0%, transparent 50%),
-            radial-gradient(circle at 85% 15%, rgba(99, 102, 241, 0.25) 0%, transparent 50%),
-            radial-gradient(circle at 15% 85%, rgba(6, 182, 212, 0.25) 0%, transparent 50%)
+            radial-gradient(circle at 15% 15%, rgba(236, 72, 153, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 85% 15%, rgba(244, 63, 94, 0.25) 0%, transparent 50%),
+            radial-gradient(circle at 15% 85%, rgba(59, 130, 246, 0.25) 0%, transparent 50%)
           `
         }}
       />
